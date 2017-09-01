@@ -21,8 +21,11 @@ int main(int argc, char *argv[])
     }
     g.mostrarGrafo();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     cout << "testando o Teste" << endl;
+=======
+>>>>>>> parent of bf8fbd9... Merge branch 'master' of https://github.com/edsonlsjunior/Grupo-4-grafos-2017-3
 =======
 >>>>>>> parent of bf8fbd9... Merge branch 'master' of https://github.com/edsonlsjunior/Grupo-4-grafos-2017-3
     return 0;
