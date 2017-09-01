@@ -7,7 +7,7 @@ using namespace std;
 /********************************************************
  ********************************************************/
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     ifstream myfile;
     myfile.open(argv[1]);           //precisa configurar o arg na IDE pra funcionar o "myfile >> n"
