@@ -23,7 +23,6 @@ class Grafo
         int grau;
         No *primeiro;                       //primeiro no inserido ao grafo
         No *ultimo;                         //ponteiro para falictar insercao de nos
-        //funcoes auxiliares
 };
 
 

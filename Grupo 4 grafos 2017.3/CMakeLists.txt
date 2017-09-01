@@ -11,6 +11,6 @@ set(SOURCE_FILES
         Source/Grafo.cpp
         Source/No.cpp
         Main.cpp
-        teste.txt)
+        teste.txt Source/FileUtils.cpp Headers/FileUtils.h)
 
 add_executable(Grupo_4_grafos_2017_3 ${SOURCE_FILES})

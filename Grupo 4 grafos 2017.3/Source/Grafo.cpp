@@ -23,7 +23,7 @@ Grafo::Grafo(int n)
     {
         inserirNo();
     }
-    cout << "grafo criado" << endl;
+    cout << "grafo criado" <<   endl;
 }
 Grafo::~Grafo()
 {
@@ -91,7 +91,8 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 
 /********************************************************
  * Printa as informacoes do grafo: (posicao da sequencia,
- * id do no, e as arestas de sua lista)
+ * id do no, e as arestas de sua lista) a formatacao deve
+ * ser revisada
  ********************************************************/
 void Grafo::mostrarGrafo ()
 {

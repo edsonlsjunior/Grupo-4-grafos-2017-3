@@ -53,10 +53,10 @@ void No::inserirArestaNo(No* no2,int pesoAresta)
 
 void No:: imprimirArestas()
 {
-    Aresta *ponteiroAuxiliar = primAresta;
+    Aresta *arestaAuxiliar = primAresta;
     for (int i = 0; i < grau; i++)
     {
-        cout << ponteiroAuxiliar->idDoPar() << "  ";
-        ponteiroAuxiliar = ponteiroAuxiliar ->getProx();
+        cout << arestaAuxiliar->idDoPar() << "  ";
+        arestaAuxiliar = arestaAuxiliar ->getProx();
     }
 }
