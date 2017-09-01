@@ -62,12 +62,16 @@ void Grafo::inserirNo()
  ********************************************************/
 No* Grafo::procurarNo(int idProcurado)
 {
-    No* p = primeiro;
-    while (p->getId() != idProcurado || p != nullptr)
+    No* ponteiroAuxiliar;
+    ponteiroAuxiliar = this->primeiro;
+    for (int i = 0; i < ordem; i++)
     {
-        p = p->getProx();
+        if (ponteiroAuxiliar->getId() == idProcurado)
+            return ponteiroAuxiliar;
+        ponteiroAuxiliar = ponteiroAuxiliar->getProx();
     }
-    return p;
+    cout << "o No " << idProcurado<< " nao foi encontrado";       //codigo apenas para identificar erros
+     return ponteiroAuxiliar;
 }
 
 /********************************************************
@@ -94,7 +98,9 @@ void Grafo::mostrarGrafo ()
     No* p = primeiro;
     for (int i = 0; i < ordem; i++)
     {
-        cout << "No " << i+1 << " de id: "<< p->getId()<< " e Arestas: " << endl;
+        cout << "No " << i+1 << " de id: "<< p->getId()<< " e Arestas: ";
+        p->imprimirArestas();
+        cout << endl;
         p = p->getProx();
     }
 }

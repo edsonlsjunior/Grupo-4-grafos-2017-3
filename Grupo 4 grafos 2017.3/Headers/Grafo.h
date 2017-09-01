@@ -15,6 +15,7 @@ class Grafo
         void inserirNo();
         void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
         void mostrarGrafo();
+        No *procurarNo(int idProcurado);
     private:
         //atributos do grafo
         int contId;
@@ -23,7 +24,6 @@ class Grafo
         No *primeiro;                       //primeiro no inserido ao grafo
         No *ultimo;                         //ponteiro para falictar insercao de nos
         //funcoes auxiliares
-        No *procurarNo(int idProcurado);
 };
 
 

@@ -1,6 +1,6 @@
 #include "..\Headers\Aresta.h"
 
-Aresta::Aresta(No* no2, int peso)
+Aresta::Aresta(No *no2, int peso)
 {
     segundoNo = no2;
     this->peso = peso;
@@ -19,4 +19,9 @@ Aresta* Aresta:: getProx ()
 void Aresta:: setProx (Aresta* a)
 {
     proxima = a;
+}
+
+int Aresta::idDoPar()
+{
+    return segundoNo -> getId();
 }

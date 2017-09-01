@@ -1,6 +1,7 @@
 #ifndef HEADERS_ARESTA_H_
 #define HEADERS_ARESTA_H_
 #include <iostream>
+#include "../Headers/No.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class Aresta
         ~Aresta();
         Aresta* getProx ();
         void setProx (Aresta* a);
+        int idDoPar ();                 //retorna o id do par da aresta;
     private:
         int peso;
         No *segundoNo;

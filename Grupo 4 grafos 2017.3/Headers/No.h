@@ -15,8 +15,10 @@ class No
         No* getProx();
         int getId();
         void inserirArestaNo(No* no2,int pesoAresta);
+        void imprimirArestas();
     private:
         int id;
+        int grau;                       //numero de arestas do no
         No *proximo;
         Aresta *primAresta;
         Aresta *ultAresta;

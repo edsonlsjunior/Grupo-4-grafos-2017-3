@@ -4,15 +4,16 @@
 No::No(int id)
 {
     this->id = id;
-    proximo = NULL;
-    primAresta = NULL;
-    ultAresta = NULL;
+    proximo = nullptr;
+    primAresta = nullptr;
+    ultAresta = nullptr;
+    grau = 0;
 }
 
 No::~No()
 {
     Aresta *p;
-    while (primAresta!= NULL)
+    while (primAresta!= nullptr)
     {
         p = primAresta->getProx();
         delete primAresta;
@@ -36,8 +37,9 @@ int No::getId()
 
 void No::inserirArestaNo(No* no2,int pesoAresta)
 {
+    grau++;
     Aresta *a = new Aresta(no2, pesoAresta);
-    if (primAresta == NULL)
+    if (primAresta == nullptr)
     {
         primAresta = a;
         ultAresta = a;
@@ -46,5 +48,15 @@ void No::inserirArestaNo(No* no2,int pesoAresta)
     {
         ultAresta->setProx(a);
         ultAresta = a;
+    }
+}
+
+void No:: imprimirArestas()
+{
+    Aresta *ponteiroAuxiliar = primAresta;
+    for (int i = 0; i < grau; i++)
+    {
+        cout << ponteiroAuxiliar->idDoPar() << "  ";
+        ponteiroAuxiliar ->getProx();
     }
 }
