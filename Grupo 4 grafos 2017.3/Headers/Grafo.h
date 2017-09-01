@@ -9,9 +9,9 @@ using namespace std;
 class Grafo
 {
     public:
-        Grafo();
-        ~Grafo();
-        Grafo(int n);
+    Grafo();
+    ~Grafo();
+     Grafo(int n);
         void inserirNo();
         void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
         void mostrarGrafo();

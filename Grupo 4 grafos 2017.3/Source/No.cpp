@@ -57,6 +57,6 @@ void No:: imprimirArestas()
     for (int i = 0; i < grau; i++)
     {
         cout << ponteiroAuxiliar->idDoPar() << "  ";
-        ponteiroAuxiliar ->getProx();
+        ponteiroAuxiliar = ponteiroAuxiliar ->getProx();
     }
 }
