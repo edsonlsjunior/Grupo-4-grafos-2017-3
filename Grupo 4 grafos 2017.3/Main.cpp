@@ -20,7 +20,10 @@ int main(int argc, char *argv[])
         g.inserirArestaGrafo(no1, no2, peso);
     }
     g.mostrarGrafo();
+<<<<<<< HEAD
 
     cout << "testando o Teste" << endl;
+=======
+>>>>>>> parent of bf8fbd9... Merge branch 'master' of https://github.com/edsonlsjunior/Grupo-4-grafos-2017-3
     return 0;
 }
