@@ -212,4 +212,4 @@ nbdist/
 .nb-gradle/
 
 # End of https://www.gitignore.io/api/c,c++,clion,eclipse,netbeans,codeblocks
-Grupo 4 grafos 2017.3/.idea/workspace.xml
+*.xml

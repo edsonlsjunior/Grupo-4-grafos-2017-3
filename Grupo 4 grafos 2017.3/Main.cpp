@@ -21,6 +21,5 @@ int main(int argc, char *argv[])
     }
     g.mostrarGrafo();
 
-    cout << "testando o Teste" << endl;
     return 0;
 }
