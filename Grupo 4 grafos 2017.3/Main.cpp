@@ -20,5 +20,7 @@ int main(int argc, char *argv[])
         g.inserirArestaGrafo(no1, no2, peso);
     }
     g.mostrarGrafo();
+
+    cout << "Teste" << endl;
     return 0;
 }
