@@ -7,10 +7,18 @@
 
 #include <iostream>
 #include <fstream>
+#include "Grafo.h"
+
+using namespace std;
 
 class FileUtils
 {
-
+public:
+    FileUtils (char **argv);
+    Grafo* retornarGrafo ();
+    void salvarGrafo (Grafo *g);
+private:
+    char **argv;
 };
 
 
