@@ -105,3 +105,7 @@ void Grafo::mostrarGrafo ()
         p = p->getProx();
     }
 }
+int Grafo::getOrdem()
+{
+    return ordem;
+}
