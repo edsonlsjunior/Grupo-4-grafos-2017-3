@@ -27,7 +27,6 @@ void FileUtils::salvarGrafo (Grafo *g)           //incompleto porque ainda nao h
 {
     ofstream leitor;
     leitor.open (argv[2]);
-    cout  << g->getOrdem ();
     leitor << g->getOrdem();
     for(int i = g->getOrdem(); i > 0; i--)
     {
