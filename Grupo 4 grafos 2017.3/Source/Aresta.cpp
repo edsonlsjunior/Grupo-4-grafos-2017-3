@@ -2,26 +2,35 @@
 
 Aresta::Aresta(No *no2, int peso)
 {
-    segundoNo = no2;
-    this->peso = peso;
-    proxima = nullptr;
+	segundoNo = no2;
+	this->peso = peso;
+	proxima = nullptr;
 }
 
 Aresta::~Aresta()
 {
 }
 
-Aresta* Aresta:: getProx ()
+/*********************************************
+ * Retorna a próxima Aresta da lista
+ *********************************************/
+Aresta* Aresta::getProx()
 {
-    return proxima;
+	return proxima;
 }
 
-void Aresta:: setProx (Aresta* a)
+/*********************************************
+ * Define a próxima Aresta da lista
+ *********************************************/
+void Aresta::setProx(Aresta* a)
 {
-    proxima = a;
+	proxima = a;
 }
 
+/**********************************************
+ * Retorna o id do No de destino da Aresta
+ **********************************************/
 int Aresta::idDoPar()
 {
-    return segundoNo -> getId();
+	return segundoNo->getId();
 }

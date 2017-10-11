@@ -9,16 +9,15 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    char **argumentos = argv;
-    if (argc == 3)   //precisa configurar o arg na IDE pra funcionar
-    {
-        FileUtils f(argumentos);
-        Grafo *grafo = f.retornarGrafo();
-        grafo->mostrarGrafo();
-        f.salvarGrafo(grafo);
-    }
-    else
-        cout << "Formato invalido!";
+	if(argc == 3)   //precisa configurar o arg na IDE pra funcionar
+	{
+		FileUtils f(argv);
+		Grafo *grafo = f.retornarGrafo();
+		grafo->mostrarGrafo();
+		f.salvarGrafo(grafo);
+	}
+	else
+		cout << "Formato invalido!";
 
-    return 0;
+	return 0;
 }

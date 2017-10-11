@@ -13,13 +13,12 @@ using namespace std;
 
 class FileUtils
 {
-public:
-    FileUtils (char **argv);
-    Grafo* retornarGrafo ();
-    void salvarGrafo (Grafo *g);
-private:
-    char **argv;
+	public:
+		FileUtils(char **argv);
+		Grafo* retornarGrafo();
+		void salvarGrafo(Grafo *g);
+	private:
+		char **argv;
 };
-
 
 #endif //GRUPO_4_GRAFOS_2017_3_FILEUTILS_H
