@@ -1,6 +1,8 @@
 #include "../Headers/Grafo.h"
 #include "../Headers/FileUtils.h"
 #include <iomanip>
+#include <sstream>
+
 
 using std::cout;
 using std::setw;
@@ -109,14 +111,18 @@ void Grafo::mostrarGrafo()
 //        cout << endl;
 //        p = p->getProx();
 //    }
-	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(13) << "Arestas" << endl;
-	for(int i = 0; i < ordem; i++)
-	{
-		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(13);
-		p->imprimirArestas();
-		cout << endl;
-		p = p->getProx();
-	}
+
+    cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(13) << "Arestas" << endl;
+    for(int i = 0; i < ordem; i++)
+    {
+        cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(13);
+        p->imprimirArestas();
+        cout << endl;
+        p = p->getProx();
+    }
+
+
+
 }
 
 /*********************************************
@@ -150,4 +156,77 @@ bool Grafo::ehNulo()
 		n = n->getProx();
 	}
 	return true;
+}
+
+bool Grafo::ehKRegular(int k)
+{
+	No *n = this->primeiro;
+
+	for(int i = 0; i < this->getOrdem(); i++)
+	{
+		if(n->getGrau() != k)
+			return false;
+        n = n->getProx();
+	}
+
+	return  true;
+}
+
+void Grafo::ehKRegular()
+{
+	No *ant = this->primeiro;
+	No *prox = ant->getProx();
+
+	while(prox != nullptr){
+
+		if(ant->getGrau() != prox->getGrau()){
+			break;
+		}
+
+		ant = prox;
+		prox = prox->getProx();
+	}
+
+	if(prox == nullptr)
+		cout << "O grafo e " << this->primeiro->getGrau()  << "-regular" << endl;
+	else
+		cout << "O grafo nao e regular" << endl;
+
+}
+
+bool Grafo::ehCompleto()
+{
+    if(this->ehKRegular(this->ordem - 1))
+        return true;
+
+    return false;
+}
+
+bool Grafo::ehDirecionado()
+{
+	return direcionado;
+}
+
+bool Grafo::setEhDirecionado(bool direcionado)
+{
+	this->direcionado = direcionado;
+}
+
+bool Grafo::ehPonderado()
+{
+    ifstream file(_argv[1]);
+    string line;
+    getline(file,line); //lê a primeira linha com o numero de vertices
+    getline(file,line); //lê a segunda linha para identificar se o grafo é ponderado
+
+    stringstream ss(line);
+    int i, cont = 0;
+
+    while(ss >> i)
+        cont++;
+
+    if(cont == 3)
+        return true;
+
+    return false;
 }

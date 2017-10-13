@@ -19,14 +19,21 @@ class Grafo
 		int getOrdem();
 		bool ehTrivial();
 		bool ehNulo();
+		bool ehKRegular(int k);
+		void ehKRegular();
+		bool ehDirecionado();
+		bool setEhDirecionado(bool direcionado);
+        bool ehCompleto();
+        bool ehPonderado(); //verifica se foi inserido o peso das aresta no arquivo de entrada
 
 	private:
 		//atributos do grafo
 		int contId;
 		int ordem;              //numero de nos no grafo
-		int grau;
+		int grau;				//Não está funcionando
 		No *primeiro;           //primeiro no inserido ao grafo
 		No *ultimo;				//ponteiro para falictar insercao de nos
+		bool direcionado;
 };
 
 #endif /* HEADERS_GRAFO_H_ */
