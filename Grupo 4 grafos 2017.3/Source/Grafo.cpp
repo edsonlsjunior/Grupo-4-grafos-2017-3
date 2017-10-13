@@ -1,5 +1,6 @@
 #include "../Headers/Grafo.h"
 #include "../Headers/FileUtils.h"
+#include "../Headers/Aresta.h"
 #include <iomanip>
 
 using std::cout;
@@ -14,50 +15,51 @@ Grafo::Grafo()
 {
 	ordem = 0;
 	grau = 0;
-	contId = 0;
-	primeiro = nullptr;
-	ultimo = nullptr;
+	maiorIdNo = 0;
+	maiorIdAresta = 0;
+	primeiroNo = nullptr;
+	ultimoNo = nullptr;
+	cout << "Grafo vazio criado." << endl;
 }
 
 Grafo::Grafo(int n)
 {
 	ordem = 0;
 	grau = 0;
-	contId = 0;
+	maiorIdNo = 0;
+	maiorIdAresta = 0;
 	for(int i = 0; i < n; i++)
-	{
 		inserirNo();
-	}
-	cout << "Grafo criado" << endl;
+	cout << "Grafo com " << ordem << " nos criado." << endl;
 }
 
 Grafo::~Grafo()
 {
 	No* p;
-	while(primeiro != nullptr)
+	while(primeiroNo != nullptr)
 	{
-		p = primeiro->getProx();
-		delete primeiro;
-		primeiro = p;
+		p = primeiroNo->getProx();
+		delete primeiroNo;
+		primeiroNo = p;
 	}
 }
 
 /********************************************************
- * Funcao para inserir No ao Grafo
+ * Funcao para inserir um No vazio ao Grafo
  ********************************************************/
 void Grafo::inserirNo()
 {
-	contId++;
-	No *p = new No(contId);
+	maiorIdNo++;
+	No *p = new No(maiorIdNo);
 	if(ordem == 0)
 	{
-		primeiro = p;
-		ultimo = p;
+		primeiroNo = p;
+		ultimoNo = p;
 	}
 	else
 	{
-		ultimo->setProx(p);
-		ultimo = p;
+		ultimoNo->setProx(p);
+		ultimoNo = p;
 	}
 	ordem++;
 }
@@ -69,7 +71,7 @@ void Grafo::inserirNo()
 No* Grafo::procurarNo(int idProcurado)
 {
 	No* p; // ponteiro auxiliar
-	p = this->primeiro;
+	p = this->primeiroNo;
 	for(int i = 0; i < ordem; i++)
 	{
 		if(p->getId() == idProcurado) return p;
@@ -90,18 +92,57 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 	No *no2 = procurarNo(idNo2);
 	if(no1 != nullptr && no2 != nullptr)
 	{
-		no1->inserirArestaNo(no2, pesoAresta);
+		maiorIdAresta++;
+		no1->inserirArestaNo(maiorIdAresta, no2, pesoAresta);
+		int grauNo = no1->getGrau();
+		if(grauNo > this->grau)
+			this->grau = grauNo;
+	}
+}
+
+/*********************************************************
+ * Exclui uma Aresta que liga o No de Origem e o No de
+ * Destino e tenha o Peso informado
+ *********************************************************/
+void Grafo::excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso)
+{
+	No* noOrigem = procurarNo(idNoOrigem);
+	Aresta* a = noOrigem->getAresta(idNoDestino, peso);
+	if(a != nullptr)
+		delete a;
+}
+
+/********************************************
+ * Exclui a Aresta que tem o id informado
+ ********************************************/
+void Grafo::excluirArestaGrafo(int idAresta)
+{
+	No* n = primeiroNo;
+	Aresta* a;
+	while(n != nullptr)
+	{
+		a = n->getPrimAresta();
+		while(a != nullptr)
+		{
+			if(a->getId() == idAresta)
+			{
+				delete a;
+				return;
+			}
+			a = a->getProx();
+		}
+		n = n->getProx();
 	}
 }
 
 /********************************************************
  * Printa as informacoes do Grafo: (posicao da sequencia,
- * Id do No, grau do No e as arestas de sua lista)
+ * id do No, grau do No e as arestas de sua lista)
  * a formatacao deve ser revisada
  ********************************************************/
 void Grafo::mostrarGrafo()
 {
-	No* p = primeiro;
+	No* p = primeiroNo;
 //    for (int i = 0; i < ordem; i++)
 //    {
 //        cout << "No " << i+1 << " de id: "<< p->getId()<< " e Arestas: ";
@@ -109,11 +150,11 @@ void Grafo::mostrarGrafo()
 //        cout << endl;
 //        p = p->getProx();
 //    }
-	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(13) << "Arestas" << endl;
+	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(17) << "Nos Adjacentes" << endl;
 	for(int i = 0; i < ordem; i++)
 	{
-		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(13);
-		p->imprimirArestas();
+		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(17);
+		p->imprimirNosAdjacentes();
 		cout << endl;
 		p = p->getProx();
 	}
@@ -137,12 +178,12 @@ bool Grafo::ehTrivial()
 }
 
 /********************************************************
- * Retorna true se o Grafo nao possuir Arestas ou falso
+ * Retorna true se o Grafo nao possuir Arestas ou false
  * caso possua alguma
  ********************************************************/
 bool Grafo::ehNulo()
 {
-	No *n = this->primeiro;
+	No *n = this->primeiroNo;
 	while(n != nullptr)
 	{
 		if(n->getPrimAresta() != nullptr)
@@ -151,3 +192,4 @@ bool Grafo::ehNulo()
 	}
 	return true;
 }
+

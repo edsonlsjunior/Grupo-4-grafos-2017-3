@@ -14,7 +14,9 @@ int main(int argc, char **argv)
 		FileUtils f(argv);
 		Grafo *grafo = f.retornarGrafo();
 		grafo->mostrarGrafo();
-		f.salvarGrafo(grafo);
+		grafo->excluirArestaGrafo(7);
+		grafo->mostrarGrafo();
+		//f.salvarGrafo(grafo);
 	}
 	else
 		cout << "Formato invalido!";

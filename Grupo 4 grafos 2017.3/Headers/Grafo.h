@@ -14,6 +14,9 @@ class Grafo
 		~Grafo();
 		void inserirNo();
 		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
+		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
+		void excluirArestaGrafo(int idAresta);
+
 		void mostrarGrafo();
 		No *procurarNo(int idProcurado);
 		int getOrdem();
@@ -22,11 +25,12 @@ class Grafo
 
 	private:
 		//atributos do grafo
-		int contId;
-		int ordem;              //numero de nos no grafo
+		int maiorIdNo;				// Id do ultimo No inserido no Grafo
+		int maiorIdAresta;			// Id da ultima Aresta inserida no Grafo
+		int ordem;              	// numero de nos no Grafo
 		int grau;
-		No *primeiro;           //primeiro no inserido ao grafo
-		No *ultimo;				//ponteiro para falictar insercao de nos
+		No *primeiroNo;         	// primeiro No inserido ao Grafo
+		No *ultimoNo;				// ponteiro para facilitar insercao de Nos
 };
 
 #endif /* HEADERS_GRAFO_H_ */
