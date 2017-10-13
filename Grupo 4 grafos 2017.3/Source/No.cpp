@@ -13,12 +13,12 @@ No::No(int id)
 
 No::~No()
 {
-	Aresta *p;
+	Aresta *a;
 	while(primAresta != nullptr)
 	{
-		p = primAresta->getProx();
+		a = primAresta->getProx();
 		delete primAresta;
-		primAresta = p;
+		primAresta = a;
 	}
 }
 
@@ -65,6 +65,22 @@ int No::getGrau()
 	return qtdArestas;
 }
 
+/******************************************
+ * Incrementa o Grau do No em uma unidade
+ ******************************************/
+void No::incrementarGrau()
+{
+	this->grau++;
+}
+
+/******************************************
+ * Decrementa o Grau do No em uma unidade
+ ******************************************/
+void No::decrementarGrau()
+{
+	this->grau--;
+}
+
 /************************************************
  * Retorna a primeira Aresta da lista de Arestas
  * conectadas ao No
@@ -105,10 +121,10 @@ void No::setUltAresta(Aresta *a)
  * Insere uma Aresta que conecta o no atual ao
  * No do parametro
  */
-void No::inserirArestaNo(No* no2, int pesoAresta)
+void No::inserirArestaNo(int idAresta, No* no2, int pesoAresta)
 {
-	grau++;
-	Aresta *a = new Aresta(no2, pesoAresta);
+	incrementarGrau();
+	Aresta *a = new Aresta(idAresta, this, no2, pesoAresta);
 	if(primAresta == nullptr)
 	{
 		primAresta = a;
@@ -124,14 +140,48 @@ void No::inserirArestaNo(No* no2, int pesoAresta)
 /***********************************************
  * Imprime o id de todos os Nos adjacentes ao No
  ***********************************************/
-void No::imprimirArestas()
+void No::imprimirNosAdjacentes()
 {
 	Aresta *arestaAuxiliar = primAresta;
 	string adj = "";
 	for(int i = 0; i < grau; i++)
 	{
-		adj += " " + to_string(arestaAuxiliar->idDoPar());
+		adj += " " + to_string(arestaAuxiliar->getIdNoDestino());
 		arestaAuxiliar = arestaAuxiliar->getProx();
 	}
 	cout << adj;
+}
+
+/***********************************************
+ * Retorna true se existir uma ou mais Arestas
+ * para o No de destino informado
+ ***********************************************/
+bool No::existeAresta(int idNoDestino)
+{
+	Aresta* a = this->primAresta;
+	while(a->getIdNoDestino() != idNoDestino)
+		a = a->getProx();
+	return a != nullptr;
+}
+
+/**************************************************
+ * Retorna true se existir uma ou mais Arestas
+ * para o No de destino que tenha(m) o Peso informado
+ **************************************************/
+bool No::existeAresta(int idNoDestino, int peso)
+{
+	Aresta* a = getAresta(idNoDestino, peso);
+	return (a != nullptr);
+}
+
+/*****************************************************
+ * Retorna uma Aresta para o No de destino que tenha 
+ * o peso informado, se existir. Se não, retorna NULL
+ *****************************************************/
+Aresta* No::getAresta(int idNoDestino, int peso)
+{
+	Aresta* a = this->primAresta;
+	while((a != nullptr) && (a->getIdNoDestino() != idNoDestino))
+		a = a->getProx();
+	return a;
 }

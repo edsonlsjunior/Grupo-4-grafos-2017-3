@@ -1,14 +1,45 @@
 #include "..\Headers\Aresta.h"
 
-Aresta::Aresta(No *no2, int peso)
+Aresta::Aresta(int id, No* no1, No *no2, int peso)
 {
-	segundoNo = no2;
+	this->id = id;
+	this->noOrigem = no1;
+	this->noDestino = no2;
 	this->peso = peso;
-	proxima = nullptr;
+	this->proxima = nullptr;
 }
 
 Aresta::~Aresta()
 {
+	if(this == noOrigem->getPrimAresta())
+	{
+		if(this == noOrigem->getUltAresta())
+		{
+			noOrigem->setPrimAresta(nullptr);
+			noOrigem->setUltAresta(nullptr);
+		}
+		else noOrigem->setPrimAresta(this->getProx());
+	}
+	else
+	{
+		Aresta* a = noOrigem->getPrimAresta();
+		while(a->getProx() != this)
+			a = a->getProx();
+
+		if(this == noOrigem->getUltAresta())
+			noOrigem->setUltAresta(a);
+		else
+			a->setProx(this->getProx());
+	}
+	noOrigem->decrementarGrau();
+}
+
+/**************************
+ * Retorna o id da Aresta
+ **************************/
+int Aresta::getId()
+{
+	return this->id;
 }
 
 /*********************************************
@@ -30,7 +61,15 @@ void Aresta::setProx(Aresta* a)
 /**********************************************
  * Retorna o id do No de destino da Aresta
  **********************************************/
-int Aresta::idDoPar()
+int Aresta::getIdNoDestino()
 {
-	return segundoNo->getId();
+	return noDestino->getId();
+}
+
+/***************************************
+ * Retorna o Peso da Aresta
+ ***************************************/
+int Aresta::getPeso()
+{
+	return this->peso;
 }

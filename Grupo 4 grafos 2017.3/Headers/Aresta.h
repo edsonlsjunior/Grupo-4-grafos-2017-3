@@ -9,16 +9,20 @@ class No;
 class Aresta
 {
 	public:
-		Aresta(No* no2, int peso);
+		Aresta(int id, No* no1, No* no2, int peso);
 		~Aresta();
+		int getId();
 		Aresta* getProx();
 		void setProx(Aresta* a);
-		int idDoPar();                 //retorna o id do par da aresta;
+		int getIdNoDestino();				// Retorna o id do par da aresta;
+		int getPeso();
 
 	private:
+		int id;
 		int peso;
-		No *segundoNo;
-		Aresta *proxima;
+		No* noOrigem;
+		No* noDestino;
+		Aresta* proxima;
 };
 
 #endif /* HEADERS_ARESTA_H_ */
