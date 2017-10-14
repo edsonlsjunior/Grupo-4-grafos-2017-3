@@ -1,10 +1,12 @@
+#include "..\Headers\Grafo.h"
 #include "..\Headers\No.h"
 #include "..\Headers\Aresta.h"
 #include <sstream>
 
-No::No(int id)
+No::No(int id, Grafo* grafo)
 {
 	this->id = id;
+	this->grafo = grafo;
 	proximo = nullptr;
 	primAresta = nullptr;
 	ultAresta = nullptr;
@@ -20,6 +22,32 @@ No::~No()
 		delete primAresta;
 		primAresta = a;
 	}
+
+	if(this == grafo->getPrimeiroNo())
+	{
+		if(this == grafo->getUltimoNo())
+		{
+			grafo->setPrimeiroNo(nullptr);
+			grafo->setUltimoNo(nullptr);
+		}
+		else
+			grafo->setPrimeiroNo(this->getProx());
+	}
+	else
+	{
+		No* n = grafo->getPrimeiroNo();
+		while(n->getProx() != this)
+			n = n->getProx();
+
+		if(this == grafo->getUltimoNo())
+		{
+			grafo->setUltimoNo(n);
+			n->setProx(nullptr);
+		}
+		else
+			n->setProx(this->getProx());
+	}
+	grafo->decrementarOrdem();
 }
 
 /*********************************************
@@ -158,10 +186,8 @@ void No::imprimirNosAdjacentes()
  ***********************************************/
 bool No::existeAresta(int idNoDestino)
 {
-	Aresta* a = this->primAresta;
-	while(a->getIdNoDestino() != idNoDestino)
-		a = a->getProx();
-	return a != nullptr;
+	Aresta* a = getAresta(idNoDestino);
+	return (a != nullptr);
 }
 
 /**************************************************
@@ -175,10 +201,28 @@ bool No::existeAresta(int idNoDestino, int peso)
 }
 
 /*****************************************************
- * Retorna uma Aresta para o No de destino que tenha 
- * o peso informado, se existir. Se não, retorna NULL
+ * Se existir, retorna uma Aresta para o No de destino
+ * que tenha o peso informado. Se não, retorna NULL
+ *
+ * ATENÇÃO!!! Se houver mais de uma Aresta com o mesmo
+ * Peso e mesmo No Destino, apenas uma sera' retornada
  *****************************************************/
 Aresta* No::getAresta(int idNoDestino, int peso)
+{
+	Aresta* a = this->primAresta;
+
+	while((a != nullptr) && (a->getIdNoDestino() != idNoDestino)
+	        && (a->getPeso() == peso))
+		a = a->getProx();
+
+	return a;
+}
+
+/***********************************************
+ * Retorna a primeira Aresta encontrada para o
+ * No de Destino, ou NULL se nao houver nenhuma
+ ***********************************************/
+Aresta* No::getAresta(int idNoDestino)
 {
 	Aresta* a = this->primAresta;
 	while((a != nullptr) && (a->getIdNoDestino() != idNoDestino))

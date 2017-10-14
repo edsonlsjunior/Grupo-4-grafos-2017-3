@@ -46,13 +46,58 @@ Grafo::~Grafo()
 	}
 }
 
+/*********************************************
+ * Decrementa a Ordem do Grafo em uma unidade
+ *********************************************/
+void Grafo::decrementarOrdem()
+{
+	this->ordem--;
+}
+
+void Grafo::incrementarOrdem()
+{
+	this->ordem++;
+}
+
+/*****************************************
+ * Retorna o primeiro No do Grafo
+ *****************************************/
+No* Grafo::getPrimeiroNo()
+{
+	return primeiroNo;
+}
+
+/*********************************
+ * Define o primeiro No do Grafo
+ *********************************/
+void Grafo::setPrimeiroNo(No* no)
+{
+	this->primeiroNo = no;
+}
+
+/*****************************************
+ * Retorna o ultimo No do Grafo
+ *****************************************/
+No* Grafo::getUltimoNo()
+{
+	return ultimoNo;
+}
+
+/*********************************
+ * Define o ultimo No do Grafo
+ *********************************/
+void Grafo::setUltimoNo(No* no)
+{
+	this->ultimoNo = no;
+}
+
 /********************************************************
  * Funcao para inserir um No vazio ao Grafo
  ********************************************************/
 void Grafo::inserirNo()
 {
 	maiorIdNo++;
-	No *p = new No(maiorIdNo);
+	No *p = new No(maiorIdNo, this);
 	if(ordem == 0)
 	{
 		primeiroNo = p;
@@ -63,7 +108,37 @@ void Grafo::inserirNo()
 		ultimoNo->setProx(p);
 		ultimoNo = p;
 	}
-	ordem++;
+	incrementarOrdem();
+}
+
+/**************************************
+ * Exclui o No com o id informado junto
+ * com todas as Arestas relacionadas
+ **************************************/
+void Grafo::excluirNo(int idNo)
+{
+	No* n = primeiroNo;					// Variavel para percorrer a lista de Nos
+	No* del = nullptr; 					// No a ser deletado
+
+	while(n != nullptr)
+	{
+		Aresta* a = n->getAresta(idNo);		// Arestas que apontam para o No del
+		while(a != nullptr)
+		{
+			delete a;
+			a = n->getAresta(idNo);
+		}
+
+		if(n->getId() == idNo)
+			del = n;
+
+		n = n->getProx();
+	}
+
+	if(del != nullptr)
+		delete del;
+	else
+		cout << "O No de id " << idNo << " nao pode ser excluido, pois nao foi encontrado." << endl;
 }
 
 /********************************************************
@@ -291,3 +366,4 @@ bool Grafo::ehPonderado()
 
 	return false;
 }
+

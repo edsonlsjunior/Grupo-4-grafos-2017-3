@@ -13,14 +13,7 @@ int main(int argc, char **argv)
 	{
 		FileUtils f(argv);
 		Grafo *grafo = f.retornarGrafo();
-        grafo->setEhDirecionado(1);
-		grafo->mostrarGrafo();
-//		grafo->ehKRegular();
-//		cout << "O grafo e 3 regular? " << grafo->ehKRegular(3) << endl;
-//        cout << "O grafo e completo? " << grafo->ehCompleto() << endl;
-//        cout << "O grafo e ponderado? " << grafo->ehPonderado() << endl;
-//        cout << "O grafo eh k-reuglar? " << grafo->ehKRegular() << endl;
-		grafo->excluirArestaGrafo(7);
+		grafo->setEhDirecionado(1);
 		grafo->mostrarGrafo();
 		//f.salvarGrafo(grafo);
 	}

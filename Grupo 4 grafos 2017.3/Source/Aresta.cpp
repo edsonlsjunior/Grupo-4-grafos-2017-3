@@ -28,7 +28,10 @@ Aresta::~Aresta()
 			a = a->getProx();
 
 		if(this == noOrigem->getUltAresta())
+		{
 			noOrigem->setUltAresta(a);
+			a->setProx(nullptr);
+		}
 		else
 			a->setProx(this->getProx());
 	}

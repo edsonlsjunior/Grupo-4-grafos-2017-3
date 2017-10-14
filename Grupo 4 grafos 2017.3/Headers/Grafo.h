@@ -6,19 +6,17 @@
 
 using namespace std;
 
+class No;
+
 class Grafo
 {
 	public:
 		Grafo();
 		Grafo(int n);
 		~Grafo();
-		void inserirNo();
-		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
-		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
-		void excluirArestaGrafo(int idAresta);
-
+		void decrementarOrdem();
+		void incrementarOrdem();
 		void mostrarGrafo();
-		No *procurarNo(int idProcurado);
 		int getOrdem();
 		bool ehTrivial();
 		bool ehNulo();
@@ -28,6 +26,18 @@ class Grafo
 		void setEhDirecionado(bool direcionado);
 		bool ehCompleto();
 		bool ehPonderado();
+
+		void inserirNo();
+		No *procurarNo(int idProcurado);
+		void excluirNo(int idNo);
+		No* getPrimeiroNo();
+		void setPrimeiroNo(No* no);
+		No* getUltimoNo();
+		void setUltimoNo(No* no);
+
+		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
+		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
+		void excluirArestaGrafo(int idAresta);
 
 	private:
 		int ordem;              	// Numero de nos no Grafo
