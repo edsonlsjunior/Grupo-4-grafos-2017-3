@@ -23,29 +23,20 @@ class Grafo
 		bool ehTrivial();
 		bool ehNulo();
 		bool ehKRegular(int k);
-		void ehKRegular();
+		int ehKRegular();
 		bool ehDirecionado();
-		bool setEhDirecionado(bool direcionado);
-        bool ehCompleto();
-        bool ehPonderado(); //verifica se foi inserido o peso das aresta no arquivo de entrada
+		void setEhDirecionado(bool direcionado);
+		bool ehCompleto();
+		bool ehPonderado();
 
 	private:
-		//atributos do grafo
-<<<<<<< HEAD
-		int contId;
-		int ordem;              //numero de nos no grafo
-		int grau;				//Não está funcionando
-		No *primeiro;           //primeiro no inserido ao grafo
-		No *ultimo;				//ponteiro para falictar insercao de nos
-		bool direcionado;
-=======
+		int ordem;              	// Numero de nos no Grafo
+		int grau;					// Nao esta funcionando
+		bool direcionado;			// Informa se o Grafo e' direcionado
 		int maiorIdNo;				// Id do ultimo No inserido no Grafo
 		int maiorIdAresta;			// Id da ultima Aresta inserida no Grafo
-		int ordem;              	// numero de nos no Grafo
-		int grau;
-		No *primeiroNo;         	// primeiro No inserido ao Grafo
-		No *ultimoNo;				// ponteiro para facilitar insercao de Nos
->>>>>>> ff90f54b5ace50a4ee21f04506552b56fbf0797f
+		No *primeiroNo;         	// Primeiro No inserido ao Grafo
+		No *ultimoNo;				// Ponteiro para facilitar insercao de Nos
 };
 
 #endif /* HEADERS_GRAFO_H_ */

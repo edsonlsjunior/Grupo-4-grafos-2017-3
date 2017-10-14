@@ -14,15 +14,15 @@ class Aresta
 		int getId();
 		Aresta* getProx();
 		void setProx(Aresta* a);
-		int getIdNoDestino();				// Retorna o id do par da aresta;
+		int getIdNoDestino();
 		int getPeso();
 
 	private:
-		int id;
-		int peso;
-		No* noOrigem;
-		No* noDestino;
-		Aresta* proxima;
+		int id;						// Id da Aresta
+		int peso;					// Peso da Aresta
+		No* noOrigem;				// No de Origem da Aresta
+		No* noDestino;				// No de Destino da Aresta
+		Aresta* proxima;			// Proxima Aresta da lista
 };
 
 #endif /* HEADERS_ARESTA_H_ */

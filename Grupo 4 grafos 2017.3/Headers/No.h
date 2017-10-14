@@ -29,11 +29,11 @@ class No
 		void imprimirNosAdjacentes();
 
 	private:
-		int id;
+		int id;						// Id do No
 		int grau;					// Numero de Arestas do No
-		No *proximo;
-		Aresta *primAresta;
-		Aresta *ultAresta;
+		No *proximo;				// Proximo No da lista
+		Aresta *primAresta;			// Primeira Aresta ligada ao No da lista
+		Aresta *ultAresta;			// Ultima Aresta ligada ao No da lista
 };
 
 #endif /* HEADERS_NO_H_ */

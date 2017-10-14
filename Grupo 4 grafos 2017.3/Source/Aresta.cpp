@@ -18,7 +18,8 @@ Aresta::~Aresta()
 			noOrigem->setPrimAresta(nullptr);
 			noOrigem->setUltAresta(nullptr);
 		}
-		else noOrigem->setPrimAresta(this->getProx());
+		else
+			noOrigem->setPrimAresta(this->getProx());
 	}
 	else
 	{

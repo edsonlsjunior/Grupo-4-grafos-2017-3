@@ -4,7 +4,6 @@
 #include <iomanip>
 #include <sstream>
 
-
 using std::cout;
 using std::setw;
 
@@ -21,6 +20,7 @@ Grafo::Grafo()
 	maiorIdAresta = 0;
 	primeiroNo = nullptr;
 	ultimoNo = nullptr;
+	direcionado = true;
 	cout << "Grafo vazio criado." << endl;
 }
 
@@ -76,7 +76,8 @@ No* Grafo::procurarNo(int idProcurado)
 	p = this->primeiroNo;
 	for(int i = 0; i < ordem; i++)
 	{
-		if(p->getId() == idProcurado) return p;
+		if(p->getId() == idProcurado)
+			return p;
 		p = p->getProx();
 	}
 	cout << "o No " << idProcurado << " nao foi encontrado" << endl; //codigo apenas para identificar erros
@@ -152,29 +153,17 @@ void Grafo::mostrarGrafo()
 //        cout << endl;
 //        p = p->getProx();
 //    }
-<<<<<<< HEAD
 
-    cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(13) << "Arestas" << endl;
-    for(int i = 0; i < ordem; i++)
-    {
-        cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(13);
-        p->imprimirArestas();
-        cout << endl;
-        p = p->getProx();
-    }
-
-
-
-=======
-	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << setw(17) << "Nos Adjacentes" << endl;
+	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau"
+	        << setw(17) << "Nos Adjacentes" << endl;
 	for(int i = 0; i < ordem; i++)
 	{
-		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << setw(17);
+		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10)
+		        << p->getGrau() << setw(17);
 		p->imprimirNosAdjacentes();
 		cout << endl;
 		p = p->getProx();
 	}
->>>>>>> ff90f54b5ace50a4ee21f04506552b56fbf0797f
 }
 
 /*********************************************
@@ -210,78 +199,95 @@ bool Grafo::ehNulo()
 	return true;
 }
 
-<<<<<<< HEAD
+/**************************************************
+ * Retorna true se todos os Nos do Grafo tiverem
+ * tantas Arestas quanto o numero informado
+ **************************************************/
 bool Grafo::ehKRegular(int k)
 {
-	No *n = this->primeiro;
+	No *n = this->primeiroNo;
 
 	for(int i = 0; i < this->getOrdem(); i++)
 	{
 		if(n->getGrau() != k)
 			return false;
-        n = n->getProx();
+		n = n->getProx();
 	}
 
-	return  true;
+	return true;
 }
 
-void Grafo::ehKRegular()
+/********************************************
+ * Compara o Grau do primeiro No com todos os
+ * outros, verificando se todos sao iguais
+ ********************************************/
+int Grafo::ehKRegular()
 {
-	No *ant = this->primeiro;
-	No *prox = ant->getProx();
+	No *n = this->primeiroNo;
 
-	while(prox != nullptr){
+	if(n == nullptr)
+		return -1;
+	int k = n->getGrau();
+	n = n->getProx();
 
-		if(ant->getGrau() != prox->getGrau()){
-			break;
-		}
-
-		ant = prox;
-		prox = prox->getProx();
+	while(n != nullptr)
+	{
+		if(n->getGrau() == k)
+			n = n->getProx();
+		else
+			return -1;
 	}
 
-	if(prox == nullptr)
-		cout << "O grafo e " << this->primeiro->getGrau()  << "-regular" << endl;
-	else
-		cout << "O grafo nao e regular" << endl;
+	return k;
 
 }
 
+/********************************************
+ * Verifica se o Grafo eh completo
+ ********************************************/
 bool Grafo::ehCompleto()
 {
-    if(this->ehKRegular(this->ordem - 1))
-        return true;
+	if(this->ehKRegular(this->ordem - 1))
+		return true;
 
-    return false;
+	return false;
 }
 
+/********************************************
+ * Verifica se o Grafo eh ou nao direcionado
+ ********************************************/
 bool Grafo::ehDirecionado()
 {
 	return direcionado;
 }
 
-bool Grafo::setEhDirecionado(bool direcionado)
+/************************************************
+ * Define a propriedade do Grafo ser direcionado
+ ************************************************/
+void Grafo::setEhDirecionado(bool direcionado)
 {
 	this->direcionado = direcionado;
 }
 
+/*********************************************
+ * Verifica se foi inserido o peso das Aresta
+ * no arquivo de entrada
+ *********************************************/
 bool Grafo::ehPonderado()
 {
-    ifstream file(_argv[1]);
-    string line;
-    getline(file,line); //lê a primeira linha com o numero de vertices
-    getline(file,line); //lê a segunda linha para identificar se o grafo é ponderado
+	ifstream file(_argv[1]);
+	string line;
+	getline(file, line); // Le a primeira linha com o numero de Nos
+	getline(file, line); // Le a segunda linha para identificar se o Grafo eh ponderado
 
-    stringstream ss(line);
-    int i, cont = 0;
+	stringstream ss(line);
+	int i, cont = 0;
 
-    while(ss >> i)
-        cont++;
+	while(ss >> i)
+		cont++;
 
-    if(cont == 3)
-        return true;
+	if(cont == 3)
+		return true;
 
-    return false;
+	return false;
 }
-=======
->>>>>>> ff90f54b5ace50a4ee21f04506552b56fbf0797f
