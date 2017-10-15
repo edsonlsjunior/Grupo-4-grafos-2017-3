@@ -23,7 +23,6 @@ Grafo* FileUtils::retornarGrafo()
 	int n, no1, no2, peso;
 	leitor >> n;
 	Grafo *g = new Grafo(n);
-	leitor >> no1 >> no2 >> peso;
 	g->setEhMultigrafo(false);
 	while(leitor >> no1 >> no2 >> peso)
 	{
