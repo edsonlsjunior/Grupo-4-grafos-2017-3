@@ -55,6 +55,9 @@ void Grafo::decrementarOrdem()
 	this->ordem--;
 }
 
+/*********************************************
+ * Incrementa a Ordem do Grafo em uma unidade
+ *********************************************/
 void Grafo::incrementarOrdem()
 {
 	this->ordem++;
@@ -117,8 +120,8 @@ void Grafo::inserirNo()
  *******************************************/
 void Grafo::excluirNo(int idNo)
 {
-	No* n = primeiroNo;					// Variavel para percorrer a lista de Nos
-	No* del = nullptr; 					// No a ser deletado
+	No* n = primeiroNo;			// Variavel para percorrer a lista de Nos
+	No* del = nullptr;			// No a ser deletado
 
 	while(n != nullptr)
 	{
@@ -169,24 +172,35 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 {
 	No *no1 = procurarNo(idNo1);
 	No *no2 = procurarNo(idNo2);
-	if(no1 != nullptr && no2 != nullptr)
+	inserirArestaGrafo(no1, no2, pesoAresta);
+}
+
+/********************************************************
+ * Funcao para inserir Aresta ao grafo. A Aresta sera
+ * alocada ao primeiro No do par, que e' referente ao
+ * primeiro parametro da funcao
+ ********************************************************/
+void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
+{
+	if(noOrigem != nullptr && noDestino != nullptr)
 	{
 		maiorIdAresta++;
-		no1->inserirArestaNo(maiorIdAresta, no2, pesoAresta);
-		int grauNo1 = no1->getGrau();
+		noOrigem->inserirArestaNo(maiorIdAresta, noDestino, pesoAresta);
+		int grauNo1 = noOrigem->getGrau();
 		if(grauNo1 > this->grau)
 			this->grau = grauNo1;
 
 		if(this->ehDirecionado() == false)
 		{
 			maiorIdAresta++;
-			no2->inserirArestaNo(maiorIdAresta, no1, pesoAresta);
-			int grauNo2 = no2->getGrau();
+			noDestino->inserirArestaNo(maiorIdAresta, noOrigem, pesoAresta);
+			int grauNo2 = noDestino->getGrau();
 			if(grauNo2 > this->grau)
 				this->grau = grauNo2;
 		}
 	}
 }
+
 
 /*********************************************************
  * Exclui uma Aresta que liga o No de Origem e o No de
@@ -378,3 +392,107 @@ bool Grafo::ehPonderado()
 	return false;
 }
 
+/*********************************************
+ * Exibe a Vizinhanca Aberta do Grafo
+ *********************************************/
+void Grafo::mostrarVizinhancaAberta(int idNo)
+{
+	Grafo* g = new Grafo();
+	No* noCentral = procurarNo(idNo);
+	No* p = nullptr;		// No auxiliar
+	Aresta* aresta = nullptr;	// Arestas saindo de n
+	if(noCentral != nullptr)
+	{
+		aresta = noCentral->getPrimAresta();
+		while(aresta != nullptr)
+		{
+			int idNoTemp = aresta->getIdNoDestino();
+			p = new No(idNoTemp, g);
+			if(g->ordem == 1)
+			{
+				g->primeiroNo = p;
+				g->ultimoNo = p;
+			}
+			else
+			{
+				g->ultimoNo->setProx(p);
+				g->ultimoNo = p;
+			}
+			aresta = aresta->getProx();
+		}
+		adicionarArestasEntreVizinhos(g, noCentral);
+		cout << "Vizinhanca Aberta:" << endl;
+		g->mostrarGrafo();
+	}
+	else
+		cout << "ERRO. No' nao encontrado" << endl;
+}
+
+/*********************************************
+ * Exibe a Vizinhanca Fechada do Grafo
+ *********************************************/
+void Grafo::mostrarVizinhancaFechada(int idNo)
+{
+	Grafo* g = new Grafo();
+	No* noCentral = procurarNo(idNo);
+	No* p = nullptr;		// No auxiliar
+	Aresta* a = nullptr;	// Arestas saindo de n
+	if(noCentral != nullptr)
+	{
+		g->ultimoNo = g->primeiroNo = new No(noCentral->getId(), g);
+		a = noCentral->getPrimAresta();
+		while(a != nullptr)
+		{
+			int idNoTemp = a->getIdNoDestino();
+			p = new No(idNoTemp, g);
+			g->ultimoNo->setProx(p);
+			g->ultimoNo = p;
+
+			g->inserirArestaGrafo(g->primeiroNo, a->getNoDestino(), a->getPeso());
+			if(g->ehDirecionado() == false)
+				g->inserirArestaGrafo(a->getNoDestino(), g->primeiroNo, a->getPeso());
+
+			a = a->getProx();
+		}
+
+		adicionarArestasEntreVizinhos(g, noCentral);
+		cout << "Vizinhanca Fechada:" << endl;
+		g->mostrarGrafo();
+	}
+	else
+		cout << "ERRO. No' nao encontrado" << endl;
+}
+
+/*********************************************************************
+ * Funcao auxiliar na exibicao de vizinhanca aberta e fechada do No.
+ * Adiciona as Arestas entre os vizinhos do No central
+ *********************************************************************/
+void Grafo::adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral)
+{
+	No* p = nullptr;		// No auxiliar
+	Aresta* b = nullptr;	// Arestas saindo dos vizinhos de n
+	Aresta* a = noCentral->getPrimAresta();
+	No* x = grafo->primeiroNo;
+	while(x != nullptr)
+	{
+		a = noCentral->getPrimAresta();
+		while(a != nullptr)
+		{
+			p = a->getNoDestino();
+			b = p->getPrimAresta();
+			while(b != nullptr)
+			{
+				if(b->getIdNoDestino() == x->getId())
+				{
+					No* n1 = grafo->procurarNo(p->getId());
+					grafo->inserirArestaGrafo(n1->getId(), x->getId(), b->getPeso());
+					if(grafo->ehDirecionado() == false)
+						grafo->inserirArestaGrafo(x->getId(), n1->getId(), b->getPeso());
+				}
+				b = b->getProx();
+			}
+			a = a->getProx();
+		}
+		x = x->getProx();
+	}
+}

@@ -17,15 +17,16 @@ class No
 		void setProx(No *proxNo);
 		No* getProx();
 		int getId();
-		int getGrau();				// Apenas para Grafos Não-Direcionados
-		int getGrauEntrada();		// Apenas para Grafos Direcionados
-		int getGrauSaida();			// Apenas para Grafos Direcionados
+		Grafo* getGrafo();
+		int getGrau();
+		int getGrauEntrada();
+		int getGrauSaida();
 		void incrementarGrau();		// Apenas para Grafos Não-Direcionados
 		void decrementarGrau();		// Apenas para Grafos Não-Direcionados
-		void incrementarGrauEntrada();		// Apenas para Grafos Direcionados
-		void incrementarGrauSaida();		// Apenas para Grafos Direcionados
-		void decrementarGrauEntrada();		// Apenas para Grafos Direcionados
-		void decrementarGrauSaida();		// Apenas para Grafos Direcionados
+		void incrementarGrauEntrada();
+		void incrementarGrauSaida();
+		void decrementarGrauEntrada();
+		void decrementarGrauSaida();
 
 		bool existeAresta(int idNoDestino);
 		bool existeAresta(int idNoDestino, int peso);
