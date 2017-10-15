@@ -14,18 +14,27 @@ FileUtils::FileUtils(char **argv)
 
 /************************************************************
  * Retorna um Grafo de um arquivo .txt passado como
- * parâmetro para o programa
+ * parï¿½metro para o programa
  ************************************************************/
 Grafo* FileUtils::retornarGrafo()
 {
 	ifstream leitor;
 	leitor.open(argv[1]);
+	int noOr, noDes;
 	int n, no1, no2, peso;
 	leitor >> n;
 	Grafo *g = new Grafo(n);
+	leitor >> no1 >> no2 >> peso;
+	noOr = no1;
+	noDes = no2;
+	g->setEhMultigrafo(false);
 	while(leitor >> no1 >> no2 >> peso)
 	{
 		g->inserirArestaGrafo(no1, no2, peso);
+		if (no1 == noOr && no2 == noDes)
+		{
+			g->setEhMultigrafo(true);
+		}
 	}
 	leitor.close();
 	return g;

@@ -496,3 +496,12 @@ void Grafo::adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral)
 		x = x->getProx();
 	}
 }
+
+void Grafo::setEhMultigrafo(bool tf)
+{
+	ehMultigrafo = tf;
+}
+bool Grafo::verificaMultigrafo()
+{
+	return ehMultigrafo;
+}

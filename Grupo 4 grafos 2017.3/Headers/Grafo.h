@@ -42,8 +42,11 @@ class Grafo
 		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
 		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
 		void excluirArestaGrafo(int idAresta);
+		void setEhMultigrafo(bool tf);
+		bool verificaMultigrafo();
 
 	private:
+		bool ehMultigrafo;			// Informa se é multigrafo ou não, e é verificado na função "retornarGrafo"
 		int ordem;              	// Numero de nos no Grafo
 		int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
 		bool direcionado;			// Informa se o Grafo e' direcionado
