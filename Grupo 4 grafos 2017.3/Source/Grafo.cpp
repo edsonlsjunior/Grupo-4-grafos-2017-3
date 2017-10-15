@@ -174,6 +174,10 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 {
 	No *no1 = procurarNo(idNo1);
 	No *no2 = procurarNo(idNo2);
+	if (no1->existeAresta(idNo2))
+	{
+		setEhMultigrafo(true);
+	}
 	inserirArestaGrafo(no1, no2, pesoAresta);
 }
 
