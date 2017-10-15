@@ -10,7 +10,9 @@ No::No(int id, Grafo* grafo)
 	proximo = nullptr;
 	primAresta = nullptr;
 	ultAresta = nullptr;
-	grau = 0;
+	grauEntrada = 0;
+	grauSaida = 0;
+	grafo->incrementarOrdem();
 }
 
 No::~No()
@@ -75,38 +77,100 @@ int No::getId()
 }
 
 /*********************************************
- * Retorna o grau do No
+ * Retorna o Grau do No
  *********************************************/
 int No::getGrau()
 {
-	int qtdArestas = 0;
-	Aresta *a = this->primAresta;
-
-	if(a == nullptr)
-		return 0;
-
-	while(a != nullptr)
-	{
-		qtdArestas++;
-		a = a->getProx();
-	}
-	return qtdArestas;
+	if(grafo->ehDirecionado())
+		return this->grauSaida + this->grauEntrada;
+	else
+		return this->grauSaida; // Neste caso, grauEntrada = grauSaida
 }
 
 /******************************************
+ * (Grafo Não-Direcionado)
  * Incrementa o Grau do No em uma unidade
  ******************************************/
 void No::incrementarGrau()
 {
-	this->grau++;
+	if(grafo->ehDirecionado() == false)
+		cout << "O Grafo nao e' direcionado. Incremente o Grau de Entrada ou Saida" << endl;
+	else
+	{
+		this->grauSaida++;
+		this->grauEntrada++;
+	}
 }
 
 /******************************************
+ * (Grafo Não-Direcionado)
  * Decrementa o Grau do No em uma unidade
  ******************************************/
 void No::decrementarGrau()
 {
-	this->grau--;
+	if(grafo->ehDirecionado() == false)
+		cout << "O Grafo nao e' direcionado. Decremente o Grau de Entrada ou Saida" << endl;
+	else
+	{
+		this->grauSaida--;
+		this->grauEntrada--;
+	}
+}
+
+/*********************************************
+ * Retorna o Grau de Entrada do No
+ *********************************************/
+int No::getGrauEntrada()
+{
+	return this->grauEntrada;
+}
+
+/*****************************************************
+ * Incrementa o Grau de Entrada do No em uma unidade
+ *****************************************************/
+void No::incrementarGrauEntrada()
+{
+	this->grauEntrada++;
+	if(grafo->ehDirecionado() == false)
+		this->grauSaida++;
+}
+
+/*****************************************************
+ * Decrementa o Grau de Entrada do No em uma unidade
+ *****************************************************/
+void No::decrementarGrauEntrada()
+{
+	this->grauEntrada--;
+	if(grafo->ehDirecionado() == false)
+		this->grauSaida--;
+}
+
+/*********************************************
+ * Retorna o Grau de Saida do No
+ *********************************************/
+int No::getGrauSaida()
+{
+	return this->grauSaida;
+}
+
+/*****************************************************
+ * Incrementa o Grau de Saída do No em uma unidade
+ ****************************************************/
+void No::incrementarGrauSaida()
+{
+	this->grauSaida++;
+	if(grafo->ehDirecionado() == false)
+		this->grauEntrada--;
+}
+
+/****************************************************
+ * Decrementa o Grau de Saida do No em uma unidade
+ ****************************************************/
+void No::decrementarGrauSaida()
+{
+	this->grauSaida--;
+	if(grafo->ehDirecionado() == false)
+		this->grauEntrada--;
 }
 
 /************************************************
@@ -151,7 +215,6 @@ void No::setUltAresta(Aresta *a)
  */
 void No::inserirArestaNo(int idAresta, No* no2, int pesoAresta)
 {
-	incrementarGrau();
 	Aresta *a = new Aresta(idAresta, this, no2, pesoAresta);
 	if(primAresta == nullptr)
 	{
@@ -172,7 +235,7 @@ void No::imprimirNosAdjacentes()
 {
 	Aresta *arestaAuxiliar = primAresta;
 	string adj = "";
-	for(int i = 0; i < grau; i++)
+	for(int i = 0; i < grauSaida; i++)
 	{
 		adj += " " + to_string(arestaAuxiliar->getIdNoDestino());
 		arestaAuxiliar = arestaAuxiliar->getProx();

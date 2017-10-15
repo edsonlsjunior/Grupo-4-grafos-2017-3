@@ -30,6 +30,7 @@ Grafo::Grafo(int n)
 	grau = 0;
 	maiorIdNo = 0;
 	maiorIdAresta = 0;
+	direcionado = true;
 	for(int i = 0; i < n; i++)
 		inserirNo();
 	cout << "Grafo com " << ordem << " nos criado." << endl;
@@ -98,7 +99,7 @@ void Grafo::inserirNo()
 {
 	maiorIdNo++;
 	No *p = new No(maiorIdNo, this);
-	if(ordem == 0)
+	if(ordem == 1)
 	{
 		primeiroNo = p;
 		ultimoNo = p;
@@ -108,13 +109,12 @@ void Grafo::inserirNo()
 		ultimoNo->setProx(p);
 		ultimoNo = p;
 	}
-	incrementarOrdem();
 }
 
-/**************************************
+/*******************************************
  * Exclui o No com o id informado junto
  * com todas as Arestas relacionadas
- **************************************/
+ *******************************************/
 void Grafo::excluirNo(int idNo)
 {
 	No* n = primeiroNo;					// Variavel para percorrer a lista de Nos
@@ -138,7 +138,8 @@ void Grafo::excluirNo(int idNo)
 	if(del != nullptr)
 		delete del;
 	else
-		cout << "O No de id " << idNo << " nao pode ser excluido, pois nao foi encontrado." << endl;
+		cout << "O No de id " << idNo
+		        << " nao pode ser excluido, pois nao foi encontrado." << endl;
 }
 
 /********************************************************
@@ -172,9 +173,18 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 	{
 		maiorIdAresta++;
 		no1->inserirArestaNo(maiorIdAresta, no2, pesoAresta);
-		int grauNo = no1->getGrau();
-		if(grauNo > this->grau)
-			this->grau = grauNo;
+		int grauNo1 = no1->getGrau();
+		if(grauNo1 > this->grau)
+			this->grau = grauNo1;
+
+		if(this->ehDirecionado() == false)
+		{
+			maiorIdAresta++;
+			no2->inserirArestaNo(maiorIdAresta, no1, pesoAresta);
+			int grauNo2 = no2->getGrau();
+			if(grauNo2 > this->grau)
+				this->grau = grauNo2;
+		}
 	}
 }
 
@@ -184,10 +194,18 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
  *********************************************************/
 void Grafo::excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso)
 {
-	No* noOrigem = procurarNo(idNoOrigem);
-	Aresta* a = noOrigem->getAresta(idNoDestino, peso);
+	No* n = procurarNo(idNoOrigem);					// n = noOrigem
+	Aresta* a = n->getAresta(idNoDestino, peso);	// a = noOrigem => noDestino
 	if(a != nullptr)
 		delete a;
+
+	if(this->ehDirecionado())
+	{
+		n = procurarNo(idNoDestino);		// n = noDestino
+		a = n->getAresta(idNoOrigem, peso);	// a = noDestino => noOrigem
+		if(a != nullptr)
+			delete a;
+	}
 }
 
 /********************************************
@@ -221,13 +239,6 @@ void Grafo::excluirArestaGrafo(int idAresta)
 void Grafo::mostrarGrafo()
 {
 	No* p = primeiroNo;
-//    for (int i = 0; i < ordem; i++)
-//    {
-//        cout << "No " << i+1 << " de id: "<< p->getId()<< " e Arestas: ";
-//        p->imprimirArestas();
-//        cout << endl;
-//        p = p->getProx();
-//    }
 
 	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau"
 	        << setw(17) << "Nos Adjacentes" << endl;

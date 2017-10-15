@@ -17,9 +17,15 @@ class No
 		void setProx(No *proxNo);
 		No* getProx();
 		int getId();
-		int getGrau();
-		void incrementarGrau();
-		void decrementarGrau();
+		int getGrau();				// Apenas para Grafos Não-Direcionados
+		int getGrauEntrada();		// Apenas para Grafos Direcionados
+		int getGrauSaida();			// Apenas para Grafos Direcionados
+		void incrementarGrau();		// Apenas para Grafos Não-Direcionados
+		void decrementarGrau();		// Apenas para Grafos Não-Direcionados
+		void incrementarGrauEntrada();		// Apenas para Grafos Direcionados
+		void incrementarGrauSaida();		// Apenas para Grafos Direcionados
+		void decrementarGrauEntrada();		// Apenas para Grafos Direcionados
+		void decrementarGrauSaida();		// Apenas para Grafos Direcionados
 
 		bool existeAresta(int idNoDestino);
 		bool existeAresta(int idNoDestino, int peso);
@@ -35,7 +41,8 @@ class No
 
 	private:
 		int id;						// Id do No
-		int grau;					// Numero de Arestas do No
+		int grauSaida;				// Numero de Arestas saindo do No
+		int grauEntrada;			// Numero de Arestas que incidem no No
 		Grafo* grafo;				// Grafo ao qual o No pertence
 		No *proximo;				// Proximo No da lista
 		Aresta *primAresta;			// Primeira Aresta ligada ao No da lista

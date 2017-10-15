@@ -7,6 +7,8 @@ Aresta::Aresta(int id, No* no1, No *no2, int peso)
 	this->noDestino = no2;
 	this->peso = peso;
 	this->proxima = nullptr;
+	no1->incrementarGrauSaida();
+	no2->incrementarGrauEntrada();
 }
 
 Aresta::~Aresta()
@@ -35,7 +37,8 @@ Aresta::~Aresta()
 		else
 			a->setProx(this->getProx());
 	}
-	noOrigem->decrementarGrau();
+	noOrigem->decrementarGrauSaida();
+	noDestino->decrementarGrauEntrada();
 }
 
 /**************************
