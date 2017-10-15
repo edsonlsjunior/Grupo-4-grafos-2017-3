@@ -14,6 +14,7 @@ class Aresta
 		int getId();
 		Aresta* getProx();
 		void setProx(Aresta* a);
+		No* getNoDestino();
 		int getIdNoDestino();
 		int getPeso();
 

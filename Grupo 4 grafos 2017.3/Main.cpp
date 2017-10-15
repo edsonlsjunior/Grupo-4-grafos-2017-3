@@ -15,6 +15,8 @@ int main(int argc, char **argv)
 		Grafo *grafo = f.retornarGrafo();
 		grafo->setEhDirecionado(1);
 		grafo->mostrarGrafo();
+		grafo->mostrarVizinhancaAberta(3);
+		grafo->mostrarVizinhancaFechada(3);
 		//f.salvarGrafo(grafo);
 	}
 	else

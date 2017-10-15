@@ -94,7 +94,9 @@ int No::getGrau()
 void No::incrementarGrau()
 {
 	if(grafo->ehDirecionado() == false)
-		cout << "O Grafo nao e' direcionado. Incremente o Grau de Entrada ou Saida" << endl;
+		cout
+		        << "O Grafo nao e' direcionado. Incremente o Grau de Entrada ou Saida"
+		        << endl;
 	else
 	{
 		this->grauSaida++;
@@ -109,7 +111,9 @@ void No::incrementarGrau()
 void No::decrementarGrau()
 {
 	if(grafo->ehDirecionado() == false)
-		cout << "O Grafo nao e' direcionado. Decremente o Grau de Entrada ou Saida" << endl;
+		cout
+		        << "O Grafo nao e' direcionado. Decremente o Grau de Entrada ou Saida"
+		        << endl;
 	else
 	{
 		this->grauSaida--;
@@ -292,3 +296,4 @@ Aresta* No::getAresta(int idNoDestino)
 		a = a->getProx();
 	return a;
 }
+
