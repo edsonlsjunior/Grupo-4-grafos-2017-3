@@ -11,6 +11,7 @@ class No;
 class Grafo
 {
 	public:
+		// Funcoes relacionadas ao Grafo
 		Grafo();
 		Grafo(int n);
 		~Grafo();
@@ -29,7 +30,11 @@ class Grafo
 		void mostrarVizinhancaAberta(int idNo);
 		void mostrarVizinhancaFechada(int idNo);
 		void adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral);
+		Grafo* copiarNosParaNovoGrafo();
+		bool verificaMultigrafo();
+		void mostrarGrafoComplementar();
 
+		// Funcoes relacionadas a Nos
 		void inserirNo();
 		No *procurarNo(int idProcurado);
 		void excluirNo(int idNo);
@@ -38,15 +43,15 @@ class Grafo
 		No* getUltimoNo();
 		void setUltimoNo(No* no);
 
+		// Funcoes relacionadas a Arestas
 		void inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta);
 		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
 		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
 		void excluirArestaGrafo(int idAresta);
 		void setEhMultigrafo(bool tf);
-		bool verificaMultigrafo();
 
 	private:
-		bool ehMultigrafo;			// Informa se é multigrafo ou não, e é verificado na função "retornarGrafo"
+		bool ehMultigrafo;			// Informa se e' multigrafo ou nao, e' verificado na funcao "FileUtils.retornarGrafo"
 		int ordem;              	// Numero de nos no Grafo
 		int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
 		bool direcionado;			// Informa se o Grafo e' direcionado

@@ -21,6 +21,7 @@ Grafo::Grafo()
 	primeiroNo = nullptr;
 	ultimoNo = nullptr;
 	direcionado = true;
+	ehMultigrafo = false;
 	cout << "Grafo vazio criado." << endl;
 }
 
@@ -31,6 +32,7 @@ Grafo::Grafo(int n)
 	maiorIdNo = 0;
 	maiorIdAresta = 0;
 	direcionado = true;
+	ehMultigrafo = false;
 	for(int i = 0; i < n; i++)
 		inserirNo();
 	cout << "Grafo com " << ordem << " nos criado." << endl;
@@ -201,10 +203,10 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 	}
 }
 
-
 /*********************************************************
  * Exclui uma Aresta que liga o No de Origem e o No de
- * Destino e tenha o Peso informado
+ * Destino e tenha o Peso informado. Se houver mais de uma,
+ * apenas a primeira encontrada será excluida
  *********************************************************/
 void Grafo::excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso)
 {
@@ -497,11 +499,101 @@ void Grafo::adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral)
 	}
 }
 
+/******************************************
+ * Define se o Grafo e' um Multigrafo
+ ******************************************/
 void Grafo::setEhMultigrafo(bool tf)
 {
 	ehMultigrafo = tf;
 }
+
+/******************************************
+ * Verifica se o Grafo e' um Multigrafo
+ ******************************************/
 bool Grafo::verificaMultigrafo()
 {
 	return ehMultigrafo;
 }
+
+/*********************************************************
+ * Copia todos os Nos (com seus IDs) para um novo Grafo,
+ * sem levar as Arestas em conta
+ *********************************************************/
+Grafo* Grafo::copiarNosParaNovoGrafo()
+{
+	Grafo* g = new Grafo();		// Novo Grafo
+	No* n = this->primeiroNo;	// No para iterar no Grafo original
+	No* p = nullptr;			// No para iterar no novo Grafo
+
+	if(n != nullptr)
+	{
+		p = new No(n->getId(), g);
+		g->ultimoNo = g->primeiroNo = p;
+		n = n->getProx();
+	}
+
+	while(n != nullptr)
+	{
+		p = new No(n->getId(), g);
+		g->ultimoNo->setProx(p);
+		g->ultimoNo = p;
+		n = n->getProx();
+	}
+
+	return g;
+}
+
+/*********************************
+ * Imprime o Grafo Complementar
+ *********************************/
+void Grafo::mostrarGrafoComplementar()
+{
+	Grafo* g = this->copiarNosParaNovoGrafo();
+	No* noOriginal = this->primeiroNo;		// No para iterar no Grafo original
+	No* novoNoOrigem = g->primeiroNo;		// Usado para manter a referencia do id do No de origem no Novo No
+	while(noOriginal != nullptr)
+	{
+		No* novoNoDestino = g->primeiroNo;		// No para iterar no novo Grafo
+		int grauSaidaNo = noOriginal->getGrauSaida();
+		int *idsDestinoOriginal = new int[grauSaidaNo];
+		Aresta* a = noOriginal->getPrimAresta();
+		while(a != nullptr)
+		{
+			for(int i = 0; i < grauSaidaNo; i++)
+			{
+				idsDestinoOriginal[i] = a->getIdNoDestino();
+				a = a->getProx();
+			}
+		}
+
+		while(novoNoDestino != nullptr)
+		{
+			if(grauSaidaNo == 0)
+			{
+				if((novoNoOrigem != novoNoDestino)
+				        && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+			else
+			{
+				bool noDestinoEstaNoArray = false;
+
+				// Checando se o novo No de Destino esta na lista de Nos Adjacentes do No Original
+				for(int i = 0; i < grauSaidaNo; i++)
+					if(novoNoDestino->getId() == idsDestinoOriginal[i])
+						noDestinoEstaNoArray = true;
+
+				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino) && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+						g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+
+			novoNoDestino = novoNoDestino->getProx();
+		}
+
+		noOriginal = noOriginal->getProx();
+		novoNoOrigem = novoNoOrigem->getProx();
+		delete[] idsDestinoOriginal;
+	}
+	g->mostrarGrafo();
+}
+

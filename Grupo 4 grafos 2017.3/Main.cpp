@@ -13,10 +13,8 @@ int main(int argc, char **argv)
 	{
 		FileUtils f(argv);
 		Grafo *grafo = f.retornarGrafo();
-		grafo->setEhDirecionado(1);
 		grafo->mostrarGrafo();
-		grafo->mostrarVizinhancaAberta(3);
-		grafo->mostrarVizinhancaFechada(3);
+		grafo->mostrarGrafoComplementar();
 		//f.salvarGrafo(grafo);
 	}
 	else
