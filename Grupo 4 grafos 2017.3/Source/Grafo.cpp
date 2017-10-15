@@ -582,7 +582,7 @@ void Grafo::mostrarGrafoComplementar()
 			{
 				bool noDestinoEstaNoArray = false;
 
-				// Checando se o novo No de Destino esta na lista de Nos Adjacentes do No Original
+				// Checando se o novo No de Destino esta' na lista de Nos Adjacentes do No Original
 				for(int i = 0; i < grauSaidaNo; i++)
 					if(novoNoDestino->getId() == idsDestinoOriginal[i])
 						noDestinoEstaNoArray = true;
@@ -601,3 +601,17 @@ void Grafo::mostrarGrafoComplementar()
 	g->mostrarGrafo();
 }
 
+/************************************************
+ * Mostra a sequencia de Graus dos Nos do Grafo
+ ************************************************/
+void Grafo::mostrarSequenciaDeGraus()
+{
+	No* n = this->primeiroNo;
+	cout << "Sequencia de Graus: ";
+	while(n->getProx() != nullptr)
+	{
+		cout << n->getGrau() << ", ";
+		n = n->getProx();
+	}
+	cout << n->getGrau() << "." << endl;
+}

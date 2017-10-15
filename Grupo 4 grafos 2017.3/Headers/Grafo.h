@@ -33,6 +33,7 @@ class Grafo
 		Grafo* copiarNosParaNovoGrafo();
 		bool verificaMultigrafo();
 		void mostrarGrafoComplementar();
+		void mostrarSequenciaDeGraus();
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();
