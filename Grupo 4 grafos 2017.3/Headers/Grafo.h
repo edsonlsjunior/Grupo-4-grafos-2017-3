@@ -34,9 +34,11 @@ class Grafo
 		bool verificaMultigrafo();
 		void mostrarGrafoComplementar();
 		void mostrarSequenciaDeGraus();
+		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();
+		void inserirNo(int id);
 		No *procurarNo(int idProcurado);
 		void excluirNo(int idNo);
 		No* getPrimeiroNo();
@@ -52,7 +54,7 @@ class Grafo
 		void setEhMultigrafo(bool tf);
 
 	private:
-		bool ehMultigrafo;			// Informa se e' multigrafo ou nao, e' verificado na funcao "FileUtils.retornarGrafo"
+		bool ehMultigrafo;			// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"
 		int ordem;              	// Numero de nos no Grafo
 		int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
 		bool direcionado;			// Informa se o Grafo e' direcionado

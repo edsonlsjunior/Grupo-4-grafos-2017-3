@@ -76,6 +76,14 @@ int No::getId()
 	return id;
 }
 
+/*****************************************
+ * Retorna o Grafo ao qual o No pertence
+ *****************************************/
+Grafo* No::getGrafo()
+{
+	return this->grafo;
+}
+
 /*********************************************
  * Retorna o Grau do No
  *********************************************/
@@ -235,7 +243,7 @@ void No::inserirArestaNo(int idAresta, No* no2, int pesoAresta)
 /***********************************************
  * Imprime o id de todos os Nos adjacentes ao No
  ***********************************************/
-void No::imprimirNosAdjacentes()
+void No::mostrarNosAdjacentes()
 {
 	Aresta *arestaAuxiliar = primAresta;
 	string adj = "";
@@ -297,3 +305,16 @@ Aresta* No::getAresta(int idNoDestino)
 	return a;
 }
 
+/**************************************************************
+ * Checa se o id deste No existe no vetor de ids de Nos
+ * informado. A funcao necessita tambem do tamanho do vetor
+ **************************************************************/
+bool No::existeDentroDoVetor(int idsNos[], int tamanhoVetor)
+{
+	int idNoProcurado = this->id;
+	bool noExisteNoArray = false;
+	for(int i = 0; i < tamanhoVetor; i++)
+		if(idNoProcurado == idsNos[i])
+			noExisteNoArray = true;
+	return noExisteNoArray;
+}

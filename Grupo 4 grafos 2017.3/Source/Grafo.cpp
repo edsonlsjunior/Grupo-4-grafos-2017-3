@@ -103,7 +103,16 @@ void Grafo::setUltimoNo(No* no)
 void Grafo::inserirNo()
 {
 	maiorIdNo++;
-	No *p = new No(maiorIdNo, this);
+	inserirNo(maiorIdNo);
+}
+
+/****************************************************
+ * Insere um novo No no Grafo com o id especificado
+ ****************************************************/
+void Grafo::inserirNo(int id)
+{
+	maiorIdNo = maiorIdNo > id ? maiorIdNo : id;
+	No *p = new No(id, this);
 	if(ordem == 1)
 	{
 		primeiroNo = p;
@@ -266,7 +275,7 @@ void Grafo::mostrarGrafo()
 	{
 		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10)
 		        << p->getGrau() << setw(17);
-		p->imprimirNosAdjacentes();
+		p->mostrarNosAdjacentes();
 		cout << endl;
 		p = p->getProx();
 	}
@@ -405,7 +414,6 @@ void Grafo::mostrarVizinhancaAberta(int idNo)
 {
 	Grafo* g = new Grafo();
 	No* noCentral = procurarNo(idNo);
-	No* p = nullptr;		// No auxiliar
 	Aresta* aresta = nullptr;	// Arestas saindo de n
 	if(noCentral != nullptr)
 	{
@@ -413,17 +421,7 @@ void Grafo::mostrarVizinhancaAberta(int idNo)
 		while(aresta != nullptr)
 		{
 			int idNoTemp = aresta->getIdNoDestino();
-			p = new No(idNoTemp, g);
-			if(g->ordem == 1)
-			{
-				g->primeiroNo = p;
-				g->ultimoNo = p;
-			}
-			else
-			{
-				g->ultimoNo->setProx(p);
-				g->ultimoNo = p;
-			}
+			g->inserirNo(idNoTemp);
 			aresta = aresta->getProx();
 		}
 		adicionarArestasEntreVizinhos(g, noCentral);
@@ -441,18 +439,15 @@ void Grafo::mostrarVizinhancaFechada(int idNo)
 {
 	Grafo* g = new Grafo();
 	No* noCentral = procurarNo(idNo);
-	No* p = nullptr;		// No auxiliar
 	Aresta* a = nullptr;	// Arestas saindo de n
 	if(noCentral != nullptr)
 	{
-		g->ultimoNo = g->primeiroNo = new No(noCentral->getId(), g);
+		inserirNo(noCentral->getId());
 		a = noCentral->getPrimAresta();
 		while(a != nullptr)
 		{
 			int idNoTemp = a->getIdNoDestino();
-			p = new No(idNoTemp, g);
-			g->ultimoNo->setProx(p);
-			g->ultimoNo = p;
+			g->inserirNo(idNoTemp);
 
 			g->inserirArestaGrafo(g->primeiroNo, a->getNoDestino(), a->getPeso());
 			if(g->ehDirecionado() == false)
@@ -527,20 +522,10 @@ Grafo* Grafo::copiarNosParaNovoGrafo()
 {
 	Grafo* g = new Grafo();		// Novo Grafo
 	No* n = this->primeiroNo;	// No para iterar no Grafo original
-	No* p = nullptr;			// No para iterar no novo Grafo
-
-	if(n != nullptr)
-	{
-		p = new No(n->getId(), g);
-		g->ultimoNo = g->primeiroNo = p;
-		n = n->getProx();
-	}
 
 	while(n != nullptr)
 	{
-		p = new No(n->getId(), g);
-		g->ultimoNo->setProx(p);
-		g->ultimoNo = p;
+		g->inserirNo(n->getId());
 		n = n->getProx();
 	}
 
@@ -559,7 +544,7 @@ void Grafo::mostrarGrafoComplementar()
 	{
 		No* novoNoDestino = g->primeiroNo;		// No para iterar no novo Grafo
 		int grauSaidaNo = noOriginal->getGrauSaida();
-		int *idsDestinoOriginal = new int[grauSaidaNo];
+		int* idsDestinoOriginal = new int[grauSaidaNo];
 		Aresta* a = noOriginal->getPrimAresta();
 		while(a != nullptr)
 		{
@@ -574,21 +559,15 @@ void Grafo::mostrarGrafoComplementar()
 		{
 			if(grauSaidaNo == 0)
 			{
-				if((novoNoOrigem != novoNoDestino)
-				        && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				if((novoNoOrigem != novoNoDestino) && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 			else
 			{
-				bool noDestinoEstaNoArray = false;
-
-				// Checando se o novo No de Destino esta' na lista de Nos Adjacentes do No Original
-				for(int i = 0; i < grauSaidaNo; i++)
-					if(novoNoDestino->getId() == idsDestinoOriginal[i])
-						noDestinoEstaNoArray = true;
+				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(idsDestinoOriginal, grauSaidaNo);
 
 				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino) && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
-						g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 
 			novoNoDestino = novoNoDestino->getProx();
@@ -598,6 +577,7 @@ void Grafo::mostrarGrafoComplementar()
 		novoNoOrigem = novoNoOrigem->getProx();
 		delete[] idsDestinoOriginal;
 	}
+	cout << "Grafo Complementar:" << endl;
 	g->mostrarGrafo();
 }
 
@@ -614,4 +594,62 @@ void Grafo::mostrarSequenciaDeGraus()
 		n = n->getProx();
 	}
 	cout << n->getGrau() << "." << endl;
+}
+
+/***********************************************************
+ * Mostra o Sub-Grafo induzido pelos Nos de ids informados
+ ***********************************************************/
+void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
+{
+	// Ordena o vetor para seguir o padrao de IDs
+	int temp;
+	for(int i = 0; i < qtdNos; i++)
+	{
+		for(int j = i + 1; j < qtdNos; j++)
+		{
+			if(idsNos[i] > idsNos[j])
+			{
+				temp = idsNos[i];
+				idsNos[i] = idsNos[j];
+				idsNos[j] = temp;
+			}
+		}
+	}
+
+	Grafo* g = new Grafo();
+
+	for(int i = 0; i < qtdNos; i++)
+		g->inserirNo(idsNos[i]);
+
+	No* n = this->primeiroNo;
+
+	while(n != nullptr)
+	{
+		if(!(n->existeDentroDoVetor(idsNos, qtdNos)))
+		{
+			n = n->getProx();
+			continue;
+		}
+
+		Aresta* a = n->getPrimAresta();
+		while(a != nullptr)
+		{
+			No* noDestinoOriginal = a->getNoDestino();
+			if(noDestinoOriginal->existeDentroDoVetor(idsNos, qtdNos))
+			{
+				No* noOrigemNovo = g->procurarNo(n->getId());
+				No* noDestinoNovo = g->procurarNo(noDestinoOriginal->getId());
+				inserirArestaGrafo(noOrigemNovo, noDestinoNovo, a->getPeso());
+			}
+			a = a->getProx();
+		}
+		n = n->getProx();
+	}
+
+	cout << "Sub-Grafo induzido pelo conjunto de Nos [";
+	for (int i = 0; i < (qtdNos - 1); i++)
+		cout << idsNos[i] << " - ";
+	cout << idsNos[qtdNos - 1] << "]:" << endl;
+	g->mostrarGrafo();
+
 }

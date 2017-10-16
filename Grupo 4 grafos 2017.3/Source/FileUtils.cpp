@@ -14,7 +14,7 @@ FileUtils::FileUtils(char **argv)
 
 /************************************************************
  * Retorna um Grafo de um arquivo .txt passado como
- * par�metro para o programa
+ * parametro para o programa
  ************************************************************/
 Grafo* FileUtils::retornarGrafo()
 {
