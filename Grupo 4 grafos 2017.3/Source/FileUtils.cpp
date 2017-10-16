@@ -63,9 +63,17 @@ void FileUtils::salvarGrafo(Grafo *g) //incompleto porque ainda nao ha forma de 
 	ofstream leitor;
 	leitor.open(argv[2]);
 	leitor << g->getOrdem();
-	for(int i = g->getOrdem(); i > 0; i--)
+
+	No* n = g->getPrimeiroNo();
+	while(n != nullptr)
 	{
-		leitor << "\n";
-		leitor << i << " " << i + 2 << " " << i - 3;
+		Aresta* a = n->getPrimAresta();
+		while(a != nullptr)
+		{
+			leitor << "\n";
+			leitor << n->getId() << " " << a->getIdNoDestino() << " " << a->getPeso();
+			a = a->getProx();
+		}
+		n = n->getProx();
 	}
 }
