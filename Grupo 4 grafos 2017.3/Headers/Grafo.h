@@ -41,9 +41,10 @@ class Grafo
 		bool auxVerificaBipartido(int ver, No* n, int* vet);
 		bool verificaSeContemCiclo(No* n);
 		void mostrarArvoreGeradoraMinima();
-        int componentesConexas();
-        void auxComponentesConexas(No* no);
+		int componentesConexas();
+		void auxComponentesConexas(No* no);
 		bool ehEuleriano();
+		void mostrarArvoreDeBuscaEmProfundidade(int idNo);
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();
@@ -62,14 +63,16 @@ class Grafo
 		void excluirArestaGrafo(int idAresta);
 
 	private:
-		bool ehMultigrafo;			// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"
-		int ordem;              	// Numero de nos no Grafo
+		bool ehMultigrafo;		// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"
+		int ordem;              // Numero de nos no Grafo
 		int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
 		bool direcionado;			// Informa se o Grafo e' direcionado
 		int maiorIdNo;				// Id do ultimo No inserido no Grafo
-		int maiorIdAresta;			// Id da ultima Aresta inserida no Grafo
-		No *primeiroNo;         	// Primeiro No inserido ao Grafo
-		No *ultimoNo;				// Ponteiro para facilitar insercao de Nos
+		int maiorIdAresta;		// Id da ultima Aresta inserida no Grafo
+		No* primeiroNo;         // Primeiro No inserido ao Grafo
+		No* ultimoNo;				// Ponteiro para facilitar insercao de Nos
+
+		void auxMostrarArvoreDeBuscaEmProfundidade(No* no);
 };
 
 #endif /* HEADERS_GRAFO_H_ */

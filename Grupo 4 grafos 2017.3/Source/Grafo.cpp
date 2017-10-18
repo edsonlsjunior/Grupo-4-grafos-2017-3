@@ -6,9 +6,6 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
-
 /**********************************************************
  * Construtores sobrecarregados para criar um Grafo vazio
  * (1o construtor) ou um Grafo com n nos (2o construtor)
@@ -154,8 +151,7 @@ void Grafo::excluirNo(int idNo)
 	if(del != nullptr)
 		delete del;
 	else
-		cout << "O No de id " << idNo
-		        << " nao pode ser excluido, pois nao foi encontrado." << endl;
+		cout << "O No de id " << idNo << " nao pode ser excluido, pois nao foi encontrado." << endl;
 }
 
 /********************************************************
@@ -185,10 +181,8 @@ void Grafo::inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta)
 {
 	No *no1 = procurarNo(idNo1);
 	No *no2 = procurarNo(idNo2);
-	if (no1->existeAresta(idNo2))
-	{
+	if(no1->existeAresta(idNo2))
 		setEhMultigrafo(true);
-	}
 	inserirArestaGrafo(no1, no2, pesoAresta);
 }
 
@@ -271,12 +265,10 @@ void Grafo::mostrarGrafo()
 {
 	No* p = primeiroNo;
 
-	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau"
-	        << setw(17) << "Nos Adjacentes" << endl;
+	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << "	   Nos Adjacentes" << endl;
 	for(int i = 0; i < ordem; i++)
 	{
-		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10)
-		        << p->getGrau() << setw(17);
+		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << "	  ";
 		p->mostrarNosAdjacentes();
 		cout << endl;
 		p = p->getProx();
@@ -453,7 +445,8 @@ void Grafo::mostrarVizinhancaFechada(int idNo)
 
 			g->inserirArestaGrafo(g->primeiroNo, a->getNoDestino(), a->getPeso());
 			if(g->ehDirecionado() == false)
-				g->inserirArestaGrafo(a->getNoDestino(), g->primeiroNo, a->getPeso());
+				g->inserirArestaGrafo(a->getNoDestino(), g->primeiroNo,
+				      a->getPeso());
 
 			a = a->getProx();
 		}
@@ -490,7 +483,8 @@ void Grafo::adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral)
 					No* n1 = grafo->procurarNo(p->getId());
 					grafo->inserirArestaGrafo(n1->getId(), x->getId(), b->getPeso());
 					if(grafo->ehDirecionado() == false)
-						grafo->inserirArestaGrafo(x->getId(), n1->getId(), b->getPeso());
+						grafo->inserirArestaGrafo(x->getId(), n1->getId(),
+						      b->getPeso());
 				}
 				b = b->getProx();
 			}
@@ -541,7 +535,7 @@ void Grafo::mostrarGrafoComplementar()
 {
 	Grafo* g = this->copiarNosParaNovoGrafo();
 	No* noOriginal = this->primeiroNo;		// No para iterar no Grafo original
-	No* novoNoOrigem = g->primeiroNo;		// Usado para manter a referencia do id do No de origem no Novo No
+	No* novoNoOrigem = g->primeiroNo;// Usado para manter a referencia do id do No de origem no Novo No
 	while(noOriginal != nullptr)
 	{
 		No* novoNoDestino = g->primeiroNo;		// No para iterar no novo Grafo
@@ -561,14 +555,17 @@ void Grafo::mostrarGrafoComplementar()
 		{
 			if(grauSaidaNo == 0)
 			{
-				if((novoNoOrigem != novoNoDestino) && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				if((novoNoOrigem != novoNoDestino)
+				      && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 			else
 			{
-				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(idsDestinoOriginal, grauSaidaNo);
+				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
+				      idsDestinoOriginal, grauSaidaNo);
 
-				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino) && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
+				      && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 
@@ -651,23 +648,22 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 	}
 
 	cout << "Sub-Grafo induzido pelo conjunto de Nos [";
-	for (int i = 0; i < (qtdNos - 1); i++)
+	for(int i = 0; i < (qtdNos - 1); i++)
 		cout << idsNos[i] << " - ";
 	cout << idsNos[qtdNos - 1] << "]:" << endl;
 	g->mostrarGrafo();
 
 }
 
-
 /***********************************************************
  * Verica a bipartição
  ***********************************************************/
 bool Grafo::verificaBipartido()
 {
-	No* n = this->getPrimeiroNo();			// Variavel para percorrer a lista de Nos
+	No* n = this->getPrimeiroNo();	// Variavel para percorrer a lista de Nos
 	int vet[this->getOrdem()];
 	bool aux;
-	for (int i=0; i<this->getOrdem(); i++)
+	for(int i = 0; i < this->getOrdem(); i++)
 	{
 		vet[i] = 0;
 	}
@@ -675,53 +671,62 @@ bool Grafo::verificaBipartido()
 
 	return aux;
 }
-bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet) {
+bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet)
+{
 
-    for (int i = 0; i < this->getOrdem(); i++) {
-        Aresta *a = n->getAresta(n->getId());
-        while (a != nullptr) {
-            if (vet[i] == 0 || vet[i] == ver) {
-                vet[i] = ver;
-                if (ver == 1) {
-                    return auxVerificaBipartido(2, n, vet);
-                }
-                if (ver == 2) {
-                    return auxVerificaBipartido(1, n, vet);
-                }
-            } else {
-                return false;
-            }
+	for(int i = 0; i < this->getOrdem(); i++)
+	{
+		Aresta *a = n->getAresta(n->getId());
+		while(a != nullptr)
+		{
+			if(vet[i] == 0 || vet[i] == ver)
+			{
+				vet[i] = ver;
+				if(ver == 1)
+				{
+					return auxVerificaBipartido(2, n, vet);
+				}
+				if(ver == 2)
+				{
+					return auxVerificaBipartido(1, n, vet);
+				}
+			}
+			else
+			{
+				return false;
+			}
 
-            a = a->getProx();
-        }
+			a = a->getProx();
+		}
 
-        n = n->getProx();
-    }
+		n = n->getProx();
+	}
 }
+
 /***********************************************************
  * Verica se contém ciclo
  *************************************************************/
-
-    bool Grafo::verificaSeContemCiclo (No *n)
+bool Grafo::verificaSeContemCiclo(No *n)
+{
+	int cont = 0;
+	while(n != nullptr)
 	{
-		int cont=0;
-		while(n!= nullptr)
+		if(n->getGrau() >= 2)
 		{
-			if(n->getGrau()>=2)
-			{
-				cont++;
-			}
+			cont++;
+		}
 
-		}
-		if(cont == this->getOrdem())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
+	if(cont == this->getOrdem())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -738,8 +743,8 @@ void Grafo::mostrarArvoreGeradoraMinima()
 {
 	typedef struct	// 
 	{				// 
-		int idNo;	// Struct auxiliar utilizada na inserção de Arestas
-		int val;	// 
+			int idNo;	// Struct auxiliar utilizada na inserção de Arestas
+			int val;	//
 	} NoAux;		//
 
 	Grafo* g = new Grafo();
@@ -750,14 +755,14 @@ void Grafo::mostrarArvoreGeradoraMinima()
 	int i = 0;
 	int idNo;
 	Aresta* a;
-	vector<Aresta*> vetArestas;		// Vetor com todas as Arestas do Grafo original
+	vector<Aresta*> vetArestas;	// Vetor com todas as Arestas do Grafo original
 
 	n = this->primeiroNo;
 	while(n != nullptr)
 	{
 		idNo = n->getId();			//
-		g->inserirNo(idNo);			// Preenche o vetor auxiliar com todos os Nos
-		vetNosAux[i].idNo = idNo;	// do Grafo e marcando seu 'val' com o valor de seu 'id'
+		g->inserirNo(idNo);		// Preenche o vetor auxiliar com todos os Nos
+		vetNosAux[i].idNo = idNo;// do Grafo e marcando seu 'val' com o valor de seu 'id'
 		vetNosAux[i].val = idNo;	//
 
 		a = n->getPrimAresta();
@@ -770,31 +775,31 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		n = n->getProx();
 	}
 
-	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);	// Ordena as Arestas
+	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);// Ordena as Arestas
 
-	int j, menor, maior, contArestas = 0;							// Variáveis de controle
+	int j, menor, maior, contArestas = 0;				// Variáveis de controle
 	int idNoOrigem, idNoDestino, valNoOrigem = 0, valNoDestino = 0;	//
 
-	for(i = 0; contArestas < ordemGrafo - 1; i++)					// Enquanto não houverem (n-1) Arestas no Grafo...
+	for(i = 0; contArestas < ordemGrafo - 1; i++)// Enquanto não houverem (n-1) Arestas no Grafo...
 	{
 		idNoOrigem = vetArestas[i]->getIdNoOrigem();
 		idNoDestino = vetArestas[i]->getIdNoDestino();
 
-		for(j = 0; j < ordemGrafo; j++)						// Percorre todos os Nos
+		for(j = 0; j < ordemGrafo; j++)					// Percorre todos os Nos
 		{
 			if(vetNosAux[j].idNo == idNoOrigem)
-				valNoOrigem = vetNosAux[j].val;				// Obtém o 'val' do No de Origem da iteração atual
+				valNoOrigem = vetNosAux[j].val;// Obtém o 'val' do No de Origem da iteração atual
 			if(vetNosAux[j].idNo == idNoDestino)
-				valNoDestino = vetNosAux[j].val;			// Obtém o 'val' do No de Destino da iteração atual
+				valNoDestino = vetNosAux[j].val;	// Obtém o 'val' do No de Destino da iteração atual
 			if((valNoOrigem != 0) && (valNoDestino != 0))
-				break;										// Quando os dois forem não-nulos, sai do loop
+				break;			// Quando os dois forem não-nulos, sai do loop
 		}
 
-		if(valNoOrigem != valNoDestino)		// Se os 'val' de Origem e Destino forem diferentes... (garante a não-formação de ciclos)
+		if(valNoOrigem != valNoDestino)// Se os 'val' de Origem e Destino forem diferentes... (garante a não-formação de ciclos)
 		{
 			g->inserirArestaGrafo(g->procurarNo(idNoOrigem),
-			        g->procurarNo(idNoDestino), vetArestas[i]->getPeso());		// Insere a Aresta
-			contArestas++;														// Incrementa o contador
+			      g->procurarNo(idNoDestino), vetArestas[i]->getPeso());// Insere a Aresta
+			contArestas++;								// Incrementa o contador
 			menor = valNoOrigem < valNoDestino ? valNoOrigem : valNoDestino;
 			maior = valNoOrigem > valNoDestino ? valNoOrigem : valNoDestino;
 
@@ -808,7 +813,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 
 	g->mostrarGrafo();
 
-	delete [] vetNosAux;
+	delete[] vetNosAux;
 }
 
 /***********************************************
@@ -817,24 +822,24 @@ void Grafo::mostrarArvoreGeradoraMinima()
  */
 int Grafo::componentesConexas()
 {
-    int componenteConexa = 0;
-    No *no = primeiroNo;
-    while (no != nullptr)
-    {
-        if(!no->isVisitado())
-        {
-            componenteConexa++;
-            auxComponentesConexas(no);
-        }
-        no = no->getProx();
-    }
-    no = primeiroNo;
-    while (no != nullptr)
-    {
-        no->setVisitado(false);
-        no = no->getProx();
-    }
-    return componenteConexa;
+	int componenteConexa = 0;
+	No *no = primeiroNo;
+	while(no != nullptr)
+	{
+		if(!no->isVisitado())
+		{
+			componenteConexa++;
+			auxComponentesConexas(no);
+		}
+		no = no->getProx();
+	}
+	no = primeiroNo;
+	while(no != nullptr)
+	{
+		no->setVisitado(false);
+		no = no->getProx();
+	}
+	return componenteConexa;
 }
 
 /***********************************************
@@ -844,35 +849,62 @@ int Grafo::componentesConexas()
  */
 void Grafo::auxComponentesConexas(No *no)
 {
-    if(!no->isVisitado())
-    {
-        no->setVisitado(true);
-        Aresta *aresta = no->getPrimAresta();
-        while (aresta != nullptr)
-        {
-            auxComponentesConexas(aresta->getNoDestino());
-            aresta = aresta->getProx();
-        }
-    }
+	if(!no->isVisitado())
+	{
+		no->setVisitado(true);
+		Aresta *aresta = no->getPrimAresta();
+		while(aresta != nullptr)
+		{
+			auxComponentesConexas(aresta->getNoDestino());
+			aresta = aresta->getProx();
+		}
+	}
 }
 
 /***********************************************
  * Funcao booleana que retornsa se o grafo possui
  * ciclo euleriano
  */
-bool Grafo:: ehEuleriano()
+bool Grafo::ehEuleriano()
 {
-    if(componentesConexas() == 1)
-    {
-        No *no = primeiroNo;
-        while (no != nullptr)
-        {
-            if (no->getGrau()%2 != 0)
-                return false;
-            no = no->getProx();
-        }
-        return true;
-    }
-    else
-        return false;
+	if(componentesConexas() == 1)
+	{
+		No *no = primeiroNo;
+		while(no != nullptr)
+		{
+			if(no->getGrau() % 2 != 0)
+				return false;
+			no = no->getProx();
+		}
+		return true;
+	}
+	else
+		return false;
 }
+
+/*********************************************
+ * Mostra a Árvore de Busca em Profundidade
+ * a partir do No informado
+ *********************************************/
+void Grafo::mostrarArvoreDeBuscaEmProfundidade(int idNo)
+{
+	No* n = procurarNo(idNo);
+	if((n != nullptr) && (!n->isVisitado()))
+		auxMostrarArvoreDeBuscaEmProfundidade(n);
+}
+
+void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
+{
+	if(!no->isVisitado())
+	{
+		no->setVisitado(true);
+		cout << no->getId() << " -> ";
+		Aresta* a = no->getPrimAresta();
+		while(a != nullptr)
+		{
+			auxMostrarArvoreDeBuscaEmProfundidade(a->getNoDestino());
+			a = a->getProx();
+		}
+	}
+}
+
