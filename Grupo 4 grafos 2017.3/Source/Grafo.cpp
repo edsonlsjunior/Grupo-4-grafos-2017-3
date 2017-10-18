@@ -219,7 +219,7 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 /*********************************************************
  * Exclui uma Aresta que liga o No de Origem e o No de
  * Destino e tenha o Peso informado. Se houver mais de uma,
- * apenas a primeira encontrada ser� excluida
+ * apenas a primeira encontrada ser� excluida
  *********************************************************/
 void Grafo::excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso)
 {
@@ -653,3 +653,74 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 	g->mostrarGrafo();
 
 }
+
+/***********************************************************
+ * Verica a bipartição
+ ***********************************************************/
+bool Grafo::verificaBipartido()
+{
+	No* n = this->getPrimeiroNo();			// Variavel para percorrer a lista de Nos
+	int vet[this->getOrdem()];
+	bool aux;
+	for (int i=0; i<this->getOrdem(); i++)
+	{
+		vet[i] = 0;
+	}
+	aux = auxVerificaBipartido(1, n, vet);
+
+	return aux;
+}
+bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet)
+{
+
+	for (int i=0; i<this->getOrdem(); i++)
+	{
+		Aresta* a = n->getAresta(n->getId());
+		while(a!= nullptr)
+		{
+			if(vet[i] == 0 || vet[i] == ver)
+			{
+				vet[i] = ver;
+				if(ver == 1)
+				{
+					return auxVerificaBipartido(2, n, vet);
+				}
+				if(ver == 2)
+				{
+					return auxVerificaBipartido(1, n, vet);
+				}
+			}
+			else
+			{
+				return false;
+			}
+
+			a = a->getProx();
+		}
+
+		n = n->getProx();
+	}
+/***********************************************************
+ * Verica se contém ciclo
+ *************************************************************/
+
+	bool Grafo::verificaSeContemCiclo(No* n)
+	{
+		int cont=0;
+		while(n!= nullptr)
+		{
+			if(n->getGrau()>=2)
+			{
+				cont++;
+			}
+
+		}
+		if(cont == this->getOrdem())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}

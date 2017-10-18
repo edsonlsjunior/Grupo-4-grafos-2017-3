@@ -5,12 +5,13 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
         Headers/Aresta.h
+        Headers/FileUtils.h
         Headers/Grafo.h
         Headers/No.h
         Source/Aresta.cpp
+        Source/FileUtils.cpp
         Source/Grafo.cpp
         Source/No.cpp
-        Main.cpp
-        grafo_entrada.txt Source/FileUtils.cpp Headers/FileUtils.h)
+        Main.cpp)
 
 add_executable(Grupo_4_grafos_2017_3 ${SOURCE_FILES})

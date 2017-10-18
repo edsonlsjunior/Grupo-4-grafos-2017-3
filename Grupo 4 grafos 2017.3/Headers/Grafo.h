@@ -35,6 +35,9 @@ class Grafo
 		void mostrarGrafoComplementar();
 		void mostrarSequenciaDeGraus();
 		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
+		bool verificaBipartido();
+		bool auxVerificaBipartido(int ver, No* n, int* vet);
+		bool verificaSeContemCiclo(No* n);
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();

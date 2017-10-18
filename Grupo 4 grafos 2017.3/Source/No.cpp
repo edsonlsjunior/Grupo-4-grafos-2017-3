@@ -2,6 +2,7 @@
 #include "..\Headers\No.h"
 #include "..\Headers\Aresta.h"
 #include <sstream>
+#include <string>
 
 No::No(int id, Grafo* grafo)
 {
@@ -96,7 +97,7 @@ int No::getGrau()
 }
 
 /******************************************
- * (Grafo Não-Direcionado)
+ * (Grafo Nï¿½o-Direcionado)
  * Incrementa o Grau do No em uma unidade
  ******************************************/
 void No::incrementarGrau()
@@ -113,7 +114,7 @@ void No::incrementarGrau()
 }
 
 /******************************************
- * (Grafo Não-Direcionado)
+ * (Grafo Nï¿½o-Direcionado)
  * Decrementa o Grau do No em uma unidade
  ******************************************/
 void No::decrementarGrau()
@@ -166,7 +167,7 @@ int No::getGrauSaida()
 }
 
 /*****************************************************
- * Incrementa o Grau de Saída do No em uma unidade
+ * Incrementa o Grau de Saï¿½da do No em uma unidade
  ****************************************************/
 void No::incrementarGrauSaida()
 {
@@ -277,9 +278,9 @@ bool No::existeAresta(int idNoDestino, int peso)
 
 /*****************************************************
  * Se existir, retorna uma Aresta para o No de destino
- * que tenha o peso informado. Se não, retorna NULL
+ * que tenha o peso informado. Se nï¿½o, retorna NULL
  *
- * ATENÇÃO!!! Se houver mais de uma Aresta com o mesmo
+ * ATENï¿½ï¿½O!!! Se houver mais de uma Aresta com o mesmo
  * Peso e mesmo No Destino, apenas uma sera' retornada
  *****************************************************/
 Aresta* No::getAresta(int idNoDestino, int peso)
@@ -318,3 +319,4 @@ bool No::existeDentroDoVetor(int idsNos[], int tamanhoVetor)
 			noExisteNoArray = true;
 	return noExisteNoArray;
 }
+
