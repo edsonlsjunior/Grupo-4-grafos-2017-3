@@ -13,6 +13,7 @@ No::No(int id, Grafo* grafo)
 	ultAresta = nullptr;
 	grauEntrada = 0;
 	grauSaida = 0;
+    visitado = false;
 	grafo->incrementarOrdem();
 }
 
@@ -318,5 +319,13 @@ bool No::existeDentroDoVetor(int idsNos[], int tamanhoVetor)
 		if(idNoProcurado == idsNos[i])
 			noExisteNoArray = true;
 	return noExisteNoArray;
+}
+
+bool No::isVisitado() const {
+    return visitado;
+}
+
+void No::setVisitado(bool visitado) {
+    No::visitado = visitado;
 }
 

@@ -19,6 +19,5 @@ int main(int argc, char **argv)
 	}
 	else
 		cout << "Formato invalido!";
-
 	return 0;
 }

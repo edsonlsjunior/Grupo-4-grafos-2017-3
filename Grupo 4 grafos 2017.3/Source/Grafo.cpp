@@ -658,8 +658,7 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 /***********************************************************
  * Verica a bipartição
  ***********************************************************/
@@ -676,41 +675,34 @@ bool Grafo::verificaBipartido()
 
 	return aux;
 }
-bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet)
-{
+bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet) {
 
-	for (int i=0; i<this->getOrdem(); i++)
-	{
-		Aresta* a = n->getAresta(n->getId());
-		while(a!= nullptr)
-		{
-			if(vet[i] == 0 || vet[i] == ver)
-			{
-				vet[i] = ver;
-				if(ver == 1)
-				{
-					return auxVerificaBipartido(2, n, vet);
-				}
-				if(ver == 2)
-				{
-					return auxVerificaBipartido(1, n, vet);
-				}
-			}
-			else
-			{
-				return false;
-			}
+    for (int i = 0; i < this->getOrdem(); i++) {
+        Aresta *a = n->getAresta(n->getId());
+        while (a != nullptr) {
+            if (vet[i] == 0 || vet[i] == ver) {
+                vet[i] = ver;
+                if (ver == 1) {
+                    return auxVerificaBipartido(2, n, vet);
+                }
+                if (ver == 2) {
+                    return auxVerificaBipartido(1, n, vet);
+                }
+            } else {
+                return false;
+            }
 
-			a = a->getProx();
-		}
+            a = a->getProx();
+        }
 
-		n = n->getProx();
-	}
+        n = n->getProx();
+    }
+}
 /***********************************************************
  * Verica se contém ciclo
  *************************************************************/
 
-	bool Grafo::verificaSeContemCiclo(No* n)
+    bool Grafo::verificaSeContemCiclo (No *n)
 	{
 		int cont=0;
 		while(n!= nullptr)
@@ -730,10 +722,6 @@ bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet)
 			return false;
 		}
 	}
-=======
->>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
-=======
->>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -752,7 +740,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 	{				// 
 		int idNo;	// Struct auxiliar utilizada na inserção de Arestas
 		int val;	// 
-	} NoAux;		// 
+	} NoAux;		//
 
 	Grafo* g = new Grafo();
 	No* n = this->primeiroNo;
@@ -821,4 +809,70 @@ void Grafo::mostrarArvoreGeradoraMinima()
 	g->mostrarGrafo();
 
 	delete [] vetNosAux;
+}
+
+/***********************************************
+ *  Funcao que conta e retorna quantas componentes
+ *  conexas o grafo possui
+ */
+int Grafo::componentesConexas()
+{
+    int componenteConexa = 0;
+    No *no = primeiroNo;
+    while (no != nullptr)
+    {
+        if(!no->isVisitado())
+        {
+            componenteConexa++;
+            auxComponentesConexas(no);
+        }
+        no = no->getProx();
+    }
+    no = primeiroNo;
+    while (no != nullptr)
+    {
+        no->setVisitado(false);
+        no = no->getProx();
+    }
+    return componenteConexa;
+}
+
+/***********************************************
+ * Funcao auxiliar a ComponentesConexas de busca
+ * em profundidade que verifica se o no e todos os
+ * seus adjacentes foram visitados
+ */
+void Grafo::auxComponentesConexas(No *no)
+{
+    if(!no->isVisitado())
+    {
+        no->setVisitado(true);
+        Aresta *aresta = no->getPrimAresta();
+        while (aresta != nullptr)
+        {
+            auxComponentesConexas(aresta->getNoDestino());
+            aresta = aresta->getProx();
+        }
+    }
+}
+
+/***********************************************
+ * Funcao booleana que retornsa se o grafo possui
+ * ciclo euleriano
+ */
+bool Grafo:: ehEuleriano()
+{
+    if(componentesConexas() == 1)
+    {
+        No *no = primeiroNo;
+        while (no != nullptr)
+        {
+            if (no->getGrau()%2 != 0)
+                return false;
+            no = no->getProx();
+        }
+        return true;
+    }
+    else
+        return false;
 }
