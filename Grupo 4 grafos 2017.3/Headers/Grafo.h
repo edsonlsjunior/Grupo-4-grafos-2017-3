@@ -38,9 +38,12 @@ class Grafo
 		void mostrarSequenciaDeGraus();
 		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		bool verificaBipartido();
 		bool auxVerificaBipartido(int ver, No* n, int* vet);
 		bool verificaSeContemCiclo(No* n);
+=======
+>>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
 =======
 >>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
 		void mostrarArvoreGeradoraMinima();
