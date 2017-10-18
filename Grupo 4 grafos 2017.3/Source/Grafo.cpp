@@ -3,9 +3,11 @@
 #include "../Headers/Aresta.h"
 #include <iomanip>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
-using std::cout;
-using std::setw;
+using namespace std;
+
 
 /**********************************************************
  * Construtores sobrecarregados para criar um Grafo vazio
@@ -219,7 +221,7 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 /*********************************************************
  * Exclui uma Aresta que liga o No de Origem e o No de
  * Destino e tenha o Peso informado. Se houver mais de uma,
- * apenas a primeira encontrada ser� excluida
+ * apenas a primeira encontrada ser� excluida
  *********************************************************/
 void Grafo::excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso)
 {
@@ -615,9 +617,11 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 			}
 		}
 	}
+	// Fim da ordenacao
 
 	Grafo* g = new Grafo();
 
+	// Insere Nos com ids iguais aos do Grafo original
 	for(int i = 0; i < qtdNos; i++)
 		g->inserirNo(idsNos[i]);
 
@@ -652,4 +656,93 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 	cout << idsNos[qtdNos - 1] << "]:" << endl;
 	g->mostrarGrafo();
 
+}
+
+/******************************************************
+ * Retorna true se a primeira Aresta tiver menor Peso
+ * que a segunda, e false se o contrario acontecer
+ */
+bool menorPesoAresta(Aresta *a, Aresta* b)
+{
+	return a->getPeso() < b->getPeso();
+}
+
+/***********************************************
+ * Mostra a AGM (Arvore Geradora Minima) do Grafo
+ */
+void Grafo::mostrarArvoreGeradoraMinima()
+{
+	typedef struct	// 
+	{				// 
+		int idNo;	// Struct auxiliar utilizada na inserção de Arestas
+		int val;	// 
+	} NoAux;		// 
+
+	Grafo* g = new Grafo();
+	No* n = this->primeiroNo;
+	int ordemGrafo = this->ordem;
+
+	NoAux* vetNosAux = new NoAux[ordemGrafo];	// Vetor auxiliar para marcar os Nos
+	int i = 0;
+	int idNo;
+	Aresta* a;
+	vector<Aresta*> vetArestas;		// Vetor com todas as Arestas do Grafo original
+
+	n = this->primeiroNo;
+	while(n != nullptr)
+	{
+		idNo = n->getId();			//
+		g->inserirNo(idNo);			// Preenche o vetor auxiliar com todos os Nos
+		vetNosAux[i].idNo = idNo;	// do Grafo e marcando seu 'val' com o valor de seu 'id'
+		vetNosAux[i].val = idNo;	//
+
+		a = n->getPrimAresta();
+		while(a != nullptr)
+		{
+			vetArestas.push_back(a);	// Preenche o vetor de Arestas
+			a = a->getProx();			// com as Arestas do Grafo original
+		}
+		i++;
+		n = n->getProx();
+	}
+
+	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);	// Ordena as Arestas
+
+	int j, menor, maior, contArestas = 0;							// Variáveis de controle
+	int idNoOrigem, idNoDestino, valNoOrigem = 0, valNoDestino = 0;	//
+
+	for(i = 0; contArestas < ordemGrafo - 1; i++)					// Enquanto não houverem (n-1) Arestas no Grafo...
+	{
+		idNoOrigem = vetArestas[i]->getIdNoOrigem();
+		idNoDestino = vetArestas[i]->getIdNoDestino();
+
+		for(j = 0; j < ordemGrafo; j++)						// Percorre todos os Nos
+		{
+			if(vetNosAux[j].idNo == idNoOrigem)
+				valNoOrigem = vetNosAux[j].val;				// Obtém o 'val' do No de Origem da iteração atual
+			if(vetNosAux[j].idNo == idNoDestino)
+				valNoDestino = vetNosAux[j].val;			// Obtém o 'val' do No de Destino da iteração atual
+			if((valNoOrigem != 0) && (valNoDestino != 0))
+				break;										// Quando os dois forem não-nulos, sai do loop
+		}
+
+		if(valNoOrigem != valNoDestino)		// Se os 'val' de Origem e Destino forem diferentes... (garante a não-formação de ciclos)
+		{
+			g->inserirArestaGrafo(g->procurarNo(idNoOrigem),
+			        g->procurarNo(idNoDestino), vetArestas[i]->getPeso());		// Insere a Aresta
+			contArestas++;														// Incrementa o contador
+			menor = valNoOrigem < valNoDestino ? valNoOrigem : valNoDestino;
+			maior = valNoOrigem > valNoDestino ? valNoOrigem : valNoDestino;
+
+			for(j = 0; j < ordemGrafo; j++)		//
+				if(vetNosAux[j].val == maior)	// Normaliza os 'val' dos dois Nos para ser igual ao menor 'val'
+					vetNosAux[j].val = menor;	//
+		}
+
+		valNoOrigem = valNoDestino = 0;		// Reseta o 'val' dos Nos
+	}
+
+	g->mostrarGrafo();
+
+	delete [] vetNosAux;
 }
