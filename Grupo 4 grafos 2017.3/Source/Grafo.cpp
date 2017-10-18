@@ -891,6 +891,7 @@ void Grafo::mostrarArvoreDeBuscaEmProfundidade(int idNo)
 	No* n = procurarNo(idNo);
 	if((n != nullptr) && (!n->isVisitado()))
 		auxMostrarArvoreDeBuscaEmProfundidade(n);
+	cout << "Fim." << endl;
 }
 
 void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
