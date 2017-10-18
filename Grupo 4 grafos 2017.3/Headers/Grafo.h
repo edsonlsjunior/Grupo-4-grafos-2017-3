@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "No.h"
+#include "Aresta.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ class Grafo
 		int ehKRegular();
 		bool ehDirecionado();
 		void setEhDirecionado(bool direcionado);
+		void setEhMultigrafo(bool tf);
 		bool ehCompleto();
 		bool ehPonderado();
 		void mostrarVizinhancaAberta(int idNo);
@@ -35,9 +37,13 @@ class Grafo
 		void mostrarGrafoComplementar();
 		void mostrarSequenciaDeGraus();
 		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
+<<<<<<< HEAD
 		bool verificaBipartido();
 		bool auxVerificaBipartido(int ver, No* n, int* vet);
 		bool verificaSeContemCiclo(No* n);
+=======
+>>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
+		void mostrarArvoreGeradoraMinima();
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();
@@ -54,7 +60,6 @@ class Grafo
 		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
 		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
 		void excluirArestaGrafo(int idAresta);
-		void setEhMultigrafo(bool tf);
 
 	private:
 		bool ehMultigrafo;			// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"

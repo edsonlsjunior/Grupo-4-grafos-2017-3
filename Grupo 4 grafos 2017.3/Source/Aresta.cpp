@@ -65,6 +65,22 @@ void Aresta::setProx(Aresta* a)
 	proxima = a;
 }
 
+/**********************************************
+ * Retorna o No de Origem da Aresta
+ **********************************************/
+No* Aresta::getNoOrigem()
+{
+	return noOrigem;
+}
+
+/*********************************************
+ * Retorna o Id do No de Origem da Aresta
+ *********************************************/
+int Aresta::getIdNoOrigem()
+{
+	return noOrigem->getId();
+}
+
 /*********************************************
  * Retorna o No de Destino da Aresta
  *********************************************/
