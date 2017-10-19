@@ -8,9 +8,10 @@
 using namespace std;
 
 class No;
-
+class Aresta;
 class Grafo
 {
+<<<<<<< HEAD
 	public:
 		// Funcoes relacionadas ao Grafo
 		Grafo(bool direcionado);
@@ -50,34 +51,76 @@ class Grafo
 		Grafo* fechoTransitivoDireto(int idNo);
 		void fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoInverso);
 		void fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto);
+=======
+public:
+	// Funcoes relacionadas ao Grafo
+	Grafo(bool direcionado);
+	Grafo(int n, bool direcionado);
+	~Grafo();
+	void decrementarOrdem();
+	void incrementarOrdem();
+	void mostrarGrafo();
+	int getOrdem();
+	bool ehTrivial();
+	bool ehNulo();
+	bool ehKRegular(int k);
+	int ehKRegular();
+	bool ehDirecionado();
+	void setEhDirecionado(bool direcionado);
+	void setEhMultigrafo(bool tf);
+	bool ehCompleto();
+	bool ehPonderado();
+	void mostrarVizinhancaAberta(int idNo);
+	void mostrarVizinhancaFechada(int idNo);
+	void adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral);
+	Grafo* copiarNosParaNovoGrafo();
+	bool verificaMultigrafo();
+	void mostrarGrafoComplementar();
+	void mostrarSequenciaDeGraus();
+	void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
+	bool verificaBipartido();
+	bool auxVerificaBipartido(int ver, No* n, int* vet);
+	bool verificaSeContemCiclo(No* n);
+	void mostrarArvoreGeradoraMinima();
+	int componentesConexas();
+	void auxComponentesConexas(No* no);
+	bool ehEuleriano();
+	void mostrarArvoreDeBuscaEmProfundidade(int idNo);
+	void nosDeArticulacao();
+	int componentesConexas(No *noIgnorado);
+	void auxComponentesConexas(No* no, No* noIgnorado);
+    void arestasPonte();
+    void auxArestasPonte(No *no, Aresta* aIngorada);
+>>>>>>> b3c365a48d23700a15d582858d9de28168668a68
 
-		// Funcoes relacionadas a Nos
-		void inserirNo();
-		void inserirNo(int id);
-		No *procurarNo(int idProcurado);
-		void excluirNo(int idNo);
-		No* getPrimeiroNo();
-		void setPrimeiroNo(No* no);
-		No* getUltimoNo();
-		void setUltimoNo(No* no);
+	// Funcoes relacionadas a Nos
+	void inserirNo();
+	void inserirNo(int id);
+	No *procurarNo(int idProcurado);
+	void excluirNo(int idNo);
+	No* getPrimeiroNo();
+	void setPrimeiroNo(No* no);
+	No* getUltimoNo();
+	void setUltimoNo(No* no);
+    No* noNaPosicao(int posicao);
 
-		// Funcoes relacionadas a Arestas
-		void inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta);
-		void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
-		void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
-		void excluirArestaGrafo(int idAresta);
+	// Funcoes relacionadas a Arestas
+	void inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta);
+	void inserirArestaGrafo(int idNo1, int idNo2, int pesoAresta);
+	void excluirArestaGrafo(int idNoOrigem, int idNoDestino, int peso);
+	void excluirArestaGrafo(int idAresta);
 
-	private:
-		bool ehMultigrafo;		// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"
-		int ordem;              // Numero de nos no Grafo
-		int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
-		bool direcionado;			// Informa se o Grafo e' direcionado
-		int maiorIdNo;				// Id do ultimo No inserido no Grafo
-		int maiorIdAresta;		// Id da ultima Aresta inserida no Grafo
-		No* primeiroNo;         // Primeiro No inserido ao Grafo
-		No* ultimoNo;				// Ponteiro para facilitar insercao de Nos
+private:
+	bool ehMultigrafo;		// Informa se e' multigrafo ou nao, e' verificado na funcao "Utils.retornarGrafo"
+	int ordem;              // Numero de nos no Grafo
+	int grau;					// Grau do Grafo ( em Grafos Direcionados, e' o maior (grauEntrada + grauSaida) entre os Nos )
+	bool direcionado;			// Informa se o Grafo e' direcionado
+	int maiorIdNo;				// Id do ultimo No inserido no Grafo
+	int maiorIdAresta;		// Id da ultima Aresta inserida no Grafo
+	No* primeiroNo;         // Primeiro No inserido ao Grafo
+	No* ultimoNo;				// Ponteiro para facilitar insercao de Nos
 
-		void auxMostrarArvoreDeBuscaEmProfundidade(No* no);
+	void auxMostrarArvoreDeBuscaEmProfundidade(No* no);
 };
 
 #endif /* HEADERS_GRAFO_H_ */

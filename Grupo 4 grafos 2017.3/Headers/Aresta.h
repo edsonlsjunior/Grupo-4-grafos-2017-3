@@ -6,6 +6,7 @@
 using namespace std;
 
 class No;
+class Grafo;
 class Aresta
 {
 	public:

@@ -52,8 +52,8 @@ private:
 		bool visitado;
 		Grafo* grafo;				// Grafo ao qual o No pertence
 		No *proximo;				// Proximo No da lista
-		Aresta* primAresta;		// Primeira Aresta ligada ao No da lista
-		Aresta* ultAresta;		// Ultima Aresta ligada ao No da lista
+		Aresta *primAresta;			// Primeira Aresta ligada ao No da lista
+		Aresta *ultAresta;			// Ultima Aresta ligada ao No da lista
 };
 
 #endif /* HEADERS_NO_H_ */

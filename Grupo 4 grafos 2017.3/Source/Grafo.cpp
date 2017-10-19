@@ -727,7 +727,10 @@ bool Grafo::verificaSeContemCiclo(No *n)
 		return false;
 	}
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3c365a48d23700a15d582858d9de28168668a68
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -847,7 +850,10 @@ int Grafo::componentesConexas()
  * Funcao auxiliar a ComponentesConexas de busca
  * em profundidade que verifica se o no e todos os
  * seus adjacentes foram visitados
- */
+ * @param no: verifica se no nao visitado, marcando
+ * a visita e chamando a funcao recursivamente para
+ * todos os seus adjacentes
+ ***********************************************/
 void Grafo::auxComponentesConexas(No *no)
 {
 	if(!no->isVisitado())
@@ -865,7 +871,7 @@ void Grafo::auxComponentesConexas(No *no)
 /***********************************************
  * Funcao booleana que retornsa se o grafo possui
  * ciclo euleriano
- */
+ ***********************************************/
 bool Grafo::ehEuleriano()
 {
 	if(componentesConexas() == 1)
@@ -943,6 +949,7 @@ Grafo* Grafo::retornarGrafoComplementar()
 				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
 						idsDestinoOriginal, grauSaidaNo);
 
+<<<<<<< HEAD
 				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
 				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
@@ -999,6 +1006,147 @@ void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto){
                 a = a->getProx();
             }
         n = n->getProx();
+=======
+/*********************************************
+ * Informa ao usuario os ids dos nos de articulacao
+ * @return void
+ *********************************************/
+void Grafo::nosDeArticulacao ()
+{
+    int i;
+    int componentesInicias = componentesConexas();
+    No* no = primeiroNo;
+    i = 0;
+    cout << "Os nos de articulacao do grafo sao: ";
+    while ( no != nullptr)
+    {
+        if (componentesInicias < componentesConexas(no))
+            cout << no->getId() << " ";
+            //nosDeArticualacao[i] = true;
+        no = no->getProx();
+        i++;
+    }
+    cout << endl;
+}
+
+/*********************************************
+ * Funcao sobrecarregada de componentesConexas()
+ * ultilizada por nosDeArticulacao.
+ * @param noIgnorado: no que nao deve ser considerado
+ * na contagem de componentes
+ * @return: numero de componentes conexas
+ *********************************************/
+int Grafo::componentesConexas(No* noIgnorado)
+{
+    int componenteConexa = 0;
+    No *no = primeiroNo;
+    while(no != nullptr)
+    {
+        if(!no->isVisitado() && no!= noIgnorado)
+        {
+            componenteConexa++;
+            auxComponentesConexas(no, noIgnorado);
+        }
+        no = no->getProx();
+    }
+    no = primeiroNo;
+    while(no != nullptr)
+    {
+        no->setVisitado(false);
+        no = no->getProx();
+    }
+    return componenteConexa;
+}
+
+/***********************************************
+ * Funcao sobrecarregada auxComponentesConexas
+ * @param no: verifica se no nao visitado, marcando
+ * a visita e chamando a funcao recursivamente para
+ * todos os seus adjacentes
+ *        noIgnorado: no que nao deve ser incluido
+ * nas chamadas recursivas
+ ***********************************************/
+void Grafo::auxComponentesConexas(No *no, No* noIgnorado)
+{
+    if(!no->isVisitado())
+    {
+        no->setVisitado(true);
+        Aresta *aresta = no->getPrimAresta();
+        while(aresta != nullptr)
+        {
+            if (aresta->getNoDestino() != noIgnorado)
+            auxComponentesConexas(aresta->getNoDestino(), noIgnorado);
+            aresta = aresta->getProx();
+        }
+    }
+}
+/***********************************************
+ * anda na lista do grafo um numero de posicoes
+ * @param posicao: numero de posicoes informada
+ * @return: o no que esta na posicao
+ ***********************************************/
+No *Grafo::noNaPosicao(int posicao)
+{
+    No *no = primeiroNo;
+    for (int i = 0; i < posicao; i++)
+        no = no->getProx();
+    return no;
+}
+
+/***********************************************
+ * informa ao usuario quais sao as arestas pontes
+ * usando busca em profundidade para identificar
+ * se os nos da aresta pertencem ao mesmo componente
+ * conexo apos a remocao da aresta
+ ***********************************************/
+void Grafo::arestasPonte()
+{
+    No* no = primeiroNo;
+    No* noAux;
+    Aresta* aresta;
+    while (no != nullptr)
+    {
+        aresta = no->getPrimAresta();
+        while (aresta != nullptr)
+        {
+            auxArestasPonte(no, aresta);
+            //print so funciona para grafos nao direcionados
+            if (!aresta->getNoDestino()->isVisitado() && no->getId() < aresta->getNoDestino()->getId())
+                cout << "("<< no->getId() << "," << aresta->getNoDestino()->getId() << ")" << " ";
+            noAux = primeiroNo;
+            while(noAux != nullptr)
+            {
+                noAux->setVisitado(false);
+                noAux = noAux->getProx();
+            }
+            aresta = aresta->getProx();
+        }
+        no = no->getProx();
+    }
+}
+
+/***********************************************
+ * ultiliza busca em profundidade (recursivamente)
+ * para identificar quais os nos compatilham do
+ * mesmo componente conexo passado pelo parametro
+ * inicial
+ * @param no: no que pertence a mesma componente
+ * do inicial
+ *        aIgnorada: aresta a ser deconsiderada
+ *        na busca
+ ***********************************************/
+void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
+{
+    if(!no->isVisitado())
+    {
+        no->setVisitado(true);
+        Aresta *aresta = no->getPrimAresta();
+        while(aresta != nullptr)
+        {
+            if (aresta != aIngorada)
+                auxArestasPonte(aresta->getNoDestino(), aIngorada);
+            aresta = aresta->getProx();
+>>>>>>> b3c365a48d23700a15d582858d9de28168668a68
         }
     }
 }
