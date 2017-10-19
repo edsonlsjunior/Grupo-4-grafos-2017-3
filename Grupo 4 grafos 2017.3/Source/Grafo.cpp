@@ -658,8 +658,6 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 /***********************************************************
  * Verica a bipartição
  ***********************************************************/
@@ -730,10 +728,6 @@ bool Grafo::auxVerificaBipartido(int ver, No* n, int* vet)
 			return false;
 		}
 	}
-=======
->>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
-=======
->>>>>>> a073f0634a5dc8e7b3bb129c571ad12fd845d6f9
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
