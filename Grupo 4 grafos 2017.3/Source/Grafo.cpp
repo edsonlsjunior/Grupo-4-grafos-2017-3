@@ -846,7 +846,10 @@ int Grafo::componentesConexas()
  * Funcao auxiliar a ComponentesConexas de busca
  * em profundidade que verifica se o no e todos os
  * seus adjacentes foram visitados
- */
+ * @param no: verifica se no nao visitado, marcando
+ * a visita e chamando a funcao recursivamente para
+ * todos os seus adjacentes
+ ***********************************************/
 void Grafo::auxComponentesConexas(No *no)
 {
 	if(!no->isVisitado())
@@ -864,7 +867,7 @@ void Grafo::auxComponentesConexas(No *no)
 /***********************************************
  * Funcao booleana que retornsa se o grafo possui
  * ciclo euleriano
- */
+ ***********************************************/
 bool Grafo::ehEuleriano()
 {
 	if(componentesConexas() == 1)
@@ -909,3 +912,94 @@ void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
 	}
 }
 
+/*********************************************
+ * Informa ao usuario os ids dos nos de articulacao
+ * @return void
+ *********************************************/
+void Grafo::nosDeArticulacao ()
+{
+    bool nosDeArticualacao [ordem];
+    int i;
+    int componentesInicias = componentesConexas();
+    for (i = 0; i < ordem; i++)
+        nosDeArticualacao[i] = false;
+    No* no = primeiroNo;
+    i = 0;
+    while ( no != nullptr)
+    {
+        if (componentesInicias < componentesConexas(no))
+            nosDeArticualacao[i] = true;
+        no = no->getProx();
+        i++;
+    }
+    cout << "Os nos de articulacao do grafo sao: ";
+    for (i = 0; i < ordem; i++)
+    {
+        if (nosDeArticualacao[i])
+        cout << noNaPosicao(i)->getId() << " ";
+    }
+}
+
+/*********************************************
+ * Funcao sobrecarregada de componentesConexas()
+ * ultilizada por nosDeArticulacao.
+ * @param noIgnorado: no que nao deve ser considerado
+ * na contagem de componentes
+ * @return: numero de componentes conexas
+ *********************************************/
+int Grafo::componentesConexas(No* noIgnorado)
+{
+    int componenteConexa = 0;
+    No *no = primeiroNo;
+    while(no != nullptr)
+    {
+        if(!no->isVisitado() && no!= noIgnorado)
+        {
+            componenteConexa++;
+            auxComponentesConexas(no, noIgnorado);
+        }
+        no = no->getProx();
+    }
+    no = primeiroNo;
+    while(no != nullptr)
+    {
+        no->setVisitado(false);
+        no = no->getProx();
+    }
+    return componenteConexa;
+}
+
+/***********************************************
+ * Funcao sobrecarregada auxComponentesConexas
+ * @param no: verifica se no nao visitado, marcando
+ * a visita e chamando a funcao recursivamente para
+ * todos os seus adjacentes
+ *        noIgnorado: no que nao deve ser incluido
+ * nas chamadas recursivas
+ ***********************************************/
+void Grafo::auxComponentesConexas(No *no, No* noIgnorado)
+{
+    if(!no->isVisitado())
+    {
+        no->setVisitado(true);
+        Aresta *aresta = no->getPrimAresta();
+        while(aresta != nullptr)
+        {
+            if (aresta->getNoDestino() != noIgnorado)
+            auxComponentesConexas(aresta->getNoDestino(), noIgnorado);
+            aresta = aresta->getProx();
+        }
+    }
+}
+/***********************************************
+ * anda na lista do grafo um numero de posicoes
+ * @param posicao: numero de posicoes informada
+ * @return: o no que esta na posicao
+ ***********************************************/
+No *Grafo::noNaPosicao(int posicao)
+{
+    No *no = primeiroNo;
+    for (int i = 0; i < posicao; i++)
+        no = no->getProx();
+    return no;
+}

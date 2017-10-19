@@ -45,6 +45,9 @@ public:
 	void auxComponentesConexas(No* no);
 	bool ehEuleriano();
 	void mostrarArvoreDeBuscaEmProfundidade(int idNo);
+	void nosDeArticulacao();
+	int componentesConexas(No *noIgnorado);
+	void auxComponentesConexas(No* no, No* noIgnorado);
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();
@@ -55,6 +58,7 @@ public:
 	void setPrimeiroNo(No* no);
 	No* getUltimoNo();
 	void setUltimoNo(No* no);
+    No* noNaPosicao(int posicao);
 
 	// Funcoes relacionadas a Arestas
 	void inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta);
