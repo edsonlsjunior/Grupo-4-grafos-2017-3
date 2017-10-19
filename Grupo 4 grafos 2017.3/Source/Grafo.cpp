@@ -837,7 +837,6 @@ int Grafo::componentesConexas()
     return componenteConexa;
 }
 
-
 /***********************************************
  * Funcao auxiliar a ComponentesConexas de busca
  * em profundidade que verifica se o no e todos os
@@ -858,7 +857,7 @@ void Grafo::auxComponentesConexas(No *no)
 }
 
 /***********************************************
- * Funcao booleana que retorna se o grafo possui
+ * Funcao booleana que retornsa se o grafo possui
  * ciclo euleriano
  */
 bool Grafo:: ehEuleriano()
@@ -876,76 +875,4 @@ bool Grafo:: ehEuleriano()
     }
     else
         return false;
-}
-
-/***********************************************
- *
- */
-void Grafo::verticeArticulacao()
-{
-	bool verticesArticulacao [ordem];
-	for (int k = 0; k < ordem; k++)
-	{
-		verticesArticulacao[k] = false;
-	}
-	int componentesIniciais = componentesConexas();
-	No *no = primeiroNo;
-	int i = 0;
-	while (no != nullptr)
-	{
-		if(componentesIniciais != componentesConexas(no))
-			verticesArticulacao[i] = true;
-		no = no->getProx();
-		i++;
-	}
-	for (i = 0; i < ordem; i++)
-	{
-		cout << verticesArticulacao[i] << " ";
-	}
-}
-
-/***********************************************
- *  Funcao que conta e retorna quantas componentes
- *  conexas o grafo possui
- */
-int Grafo::componentesConexas(No * noIgnorado)
-{
-	int componenteConexa = 0;
-	No *no = primeiroNo;
-	while (no != nullptr)
-	{
-		if(!no->isVisitado())
-		{
-			componenteConexa++;
-			auxComponentesConexas(no, noIgnorado);
-		}
-		no = no->getProx();
-	}
-	no = primeiroNo;
-	while (no != nullptr)
-	{
-		no->setVisitado(false);
-		no = no->getProx();
-	}
-	return componenteConexa;
-}
-
-/***********************************************
- * Funcao auxiliar a ComponentesConexas de busca
- * em profundidade que verifica se o no e todos os
- * seus adjacentes foram visitados
- */
-void Grafo::auxComponentesConexas(No *no, No *noIgnorado)
-{
-	if(!no->isVisitado())
-	{
-		no->setVisitado(true);
-		Aresta *aresta = no->getPrimAresta();
-		while (aresta != nullptr)
-		{
-			if(aresta->getNoDestino() != noIgnorado)
-				auxComponentesConexas(aresta->getNoDestino(), noIgnorado);
-			aresta = aresta->getProx();
-		}
-	}
 }

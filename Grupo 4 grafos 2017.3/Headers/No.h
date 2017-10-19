@@ -49,7 +49,7 @@ private:
 		int id;						// Id do No
 		int grauSaida;				// Numero de Arestas saindo do No
 		int grauEntrada;			// Numero de Arestas que incidem no No
-		bool visitado;              // Atributo que facilita as buscas em profundidade
+		bool visitado;
 		Grafo* grafo;				// Grafo ao qual o No pertence
 		No *proximo;				// Proximo No da lista
 		Aresta *primAresta;			// Primeira Aresta ligada ao No da lista

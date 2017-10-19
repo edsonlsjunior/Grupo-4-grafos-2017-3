@@ -50,7 +50,7 @@ int Aresta::getId()
 }
 
 /*********************************************
- * Retorna a prï¿½xima Aresta da lista
+ * Retorna a próxima Aresta da lista
  *********************************************/
 Aresta* Aresta::getProx()
 {
@@ -58,7 +58,7 @@ Aresta* Aresta::getProx()
 }
 
 /*********************************************
- * Define a prï¿½xima Aresta da lista
+ * Define a próxima Aresta da lista
  *********************************************/
 void Aresta::setProx(Aresta* a)
 {
