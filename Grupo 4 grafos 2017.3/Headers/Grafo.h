@@ -11,6 +11,7 @@ class No;
 class Aresta;
 class Grafo
 {
+
 public:
 	// Funcoes relacionadas ao Grafo
 	Grafo(bool direcionado);
@@ -45,6 +46,11 @@ public:
 	void auxComponentesConexas(No* no);
 	bool ehEuleriano();
 	void mostrarArvoreDeBuscaEmProfundidade(int idNo);
+    Grafo* fechoTransitivoIndireto(int idNo);
+    Grafo* fechoTransitivoDireto(int idNo);
+    void fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoInverso);
+    void fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto);
+    Grafo* retornarGrafoComplementar();
 	void nosDeArticulacao();
 	int componentesConexas(No *noIgnorado);
 	void auxComponentesConexas(No* no, No* noIgnorado);

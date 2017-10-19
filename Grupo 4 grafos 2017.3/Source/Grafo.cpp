@@ -5,7 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#define INFINITO 99999999
+#define INFINITO 2147483647
 
 /**********************************************************
  * Construtores sobrecarregados para criar um Grafo vazio
@@ -911,12 +911,104 @@ void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
 		}
 	}
 }
+//RETORNA O GRAFO COMPLEMENTAR
+Grafo* Grafo::retornarGrafoComplementar()
+{
+	Grafo* g = this->copiarNosParaNovoGrafo();
+	No* noOriginal = this->primeiroNo;		// No para iterar no Grafo original
+	No* novoNoOrigem = g->primeiroNo;// Usado para manter a referencia do id do No de origem no Novo No
+	while(noOriginal != nullptr)
+	{
+		No* novoNoDestino = g->primeiroNo;		// No para iterar no novo Grafo
+		int grauSaidaNo = noOriginal->getGrauSaida();
+		int* idsDestinoOriginal = new int[grauSaidaNo];
+		Aresta* a = noOriginal->getPrimAresta();
+		while(a != nullptr)
+		{
+			for(int i = 0; i < grauSaidaNo; i++)
+			{
+				idsDestinoOriginal[i] = a->getIdNoDestino();
+				a = a->getProx();
+			}
+		}
 
+		while(novoNoDestino != nullptr)
+		{
+			if(grauSaidaNo == 0)
+			{
+				if((novoNoOrigem != novoNoDestino)
+				   && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+			else
+			{
+				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
+						idsDestinoOriginal, grauSaidaNo);
+				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
+				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+
+			novoNoDestino = novoNoDestino->getProx();
+		}
+
+		noOriginal = noOriginal->getProx();
+		novoNoOrigem = novoNoOrigem->getProx();
+		delete[] idsDestinoOriginal;
+	}
+	return g;
+}
+// FECHO TRANSITIVO
+
+  	Grafo* Grafo::fechoTransitivoIndireto(int idNo){
+    Grafo* fechoIndireto = new Grafo(true);
+    fechoTransitivoIndiretoAux(idNo,fechoIndireto,retornarGrafoComplementar());
+    return fechoIndireto;
+}
+
+Grafo* Grafo::fechoTransitivoDireto(int idNo){
+    Grafo* fechoDireto = new Grafo(true);
+    fechoTransitivoDiretoAux(idNo,fechoDireto);
+    return fechoDireto;
+}
+
+
+
+ void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoComplementar){
+    No* n = grafoComplementar->procurarNo(idNo);
+    if(n != nullptr){
+        if(fechoIndireto->procurarNo(idNo) == nullptr){
+            Aresta *a = n->getPrimAresta();
+            fechoIndireto->inserirNo(n->getId());
+            while(a != nullptr){
+                fechoTransitivoIndiretoAux(a->getIdNoDestino(),fechoIndireto,grafoComplementar);
+                a = a->getProx();
+            }
+        n = n->getProx();
+        }
+    }
+}
+
+void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto)
+{
+    No* n = fechoDireto->procurarNo(idNo);
+    if(n != nullptr){
+        if(fechoDireto->procurarNo(idNo) == nullptr) {
+            Aresta *a = n->getPrimAresta();
+            fechoDireto->inserirNo(n->getId());
+            while (a != nullptr) {
+                fechoTransitivoDiretoAux(a->getIdNoDestino(), fechoDireto);
+                a = a->getProx();
+            }
+            n = n->getProx();
+        }
+    }
+}
 /*********************************************
  * Informa ao usuario os ids dos nos de articulacao
  * @return void
  *********************************************/
-void Grafo::nosDeArticulacao ()
+void Grafo::nosDeArticulacao()
 {
     int i;
     int componentesInicias = componentesConexas();
@@ -1057,3 +1149,55 @@ void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
     }
 }
 
+float ** Grafo::matrizFloyd(){
+    int *vetorDeIndices = new int(ordem);
+    float **matriz = new float * [ordem];
+    for(int c = 0; c < ordem; c++){
+        matriz[c] = new float[ordem];
+        for(int d = 0; d < ordem; d++){
+            if(c==d)
+                matriz[c][d] = 0;
+            else
+                matriz[c][d] = INFINITO;
+        }
+    }
+    No * auxNo = primeiroNo;
+    int i = 0;
+    while (auxNo != nullptr)
+    {
+        vetorDeIndices[i] = auxNo->getId();
+        auxNo = auxNo->getProx();
+        i++;
+    }
+    auxNo = primeiroNo;
+    Aresta * auxAresta = nullptr;
+    while(auxNo!=nullptr){
+        auxAresta = auxNo->getPrimAresta();
+        while(auxAresta!= nullptr){
+            No* auxDestino = auxAresta->getNoDestino();
+            matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
+            auxAresta = auxAresta->getProx();
+        }
+        auxNo = auxNo->getProx();
+    }
+    for(int k = 0; k < ordem; k++){
+        for(int a = 0; a < ordem; a++){
+            for(int b = 0; b < ordem; b++){
+                if (matriz[a][b] > matriz[a][k] + matriz[k][b])
+                    matriz[a][b] = matriz[a][k] + matriz[k][b];
+            }
+        }
+    }
+    return matriz;
+}
+
+int Grafo::encontraIndice(int *vetor, int id)
+{
+    int i;
+    for (i = 0; i < ordem; i++)
+    {
+        if (id == vetor[i])
+            return i;
+    }
+    cout << "indice incorreto em encontraIndice " << id;
+}
