@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 		grafo->mostrarGrafo();
 		grafo->mostrarGrafoComplementar();
 		//f.salvarGrafo(grafo);
-		grafo->nosDeArticulacao();
+		grafo->arestasPonte();
 	}
 	else
 		cout << "Formato invalido!";

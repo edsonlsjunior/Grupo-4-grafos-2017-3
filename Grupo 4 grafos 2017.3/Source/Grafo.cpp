@@ -918,26 +918,20 @@ void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
  *********************************************/
 void Grafo::nosDeArticulacao ()
 {
-    bool nosDeArticualacao [ordem];
     int i;
     int componentesInicias = componentesConexas();
-    for (i = 0; i < ordem; i++)
-        nosDeArticualacao[i] = false;
     No* no = primeiroNo;
     i = 0;
+    cout << "Os nos de articulacao do grafo sao: ";
     while ( no != nullptr)
     {
         if (componentesInicias < componentesConexas(no))
-            nosDeArticualacao[i] = true;
+            cout << no->getId() << " ";
+            //nosDeArticualacao[i] = true;
         no = no->getProx();
         i++;
     }
-    cout << "Os nos de articulacao do grafo sao: ";
-    for (i = 0; i < ordem; i++)
-    {
-        if (nosDeArticualacao[i])
-        cout << noNaPosicao(i)->getId() << " ";
-    }
+    cout << endl;
 }
 
 /*********************************************
@@ -1002,4 +996,61 @@ No *Grafo::noNaPosicao(int posicao)
     for (int i = 0; i < posicao; i++)
         no = no->getProx();
     return no;
+}
+
+/***********************************************
+ * informa ao usuario quais sao as arestas pontes
+ * usando busca em profundidade para identificar
+ * se os nos da aresta pertencem ao mesmo componente
+ * conexo apos a remocao da aresta
+ ***********************************************/
+void Grafo::arestasPonte()
+{
+    No* no = primeiroNo;
+    No* noAux;
+    Aresta* aresta;
+    while (no != nullptr)
+    {
+        aresta = no->getPrimAresta();
+        while (aresta != nullptr)
+        {
+            auxArestasPonte(no, aresta);
+            //print so funciona para grafos nao direcionados
+            if (!aresta->getNoDestino()->isVisitado() && no->getId() < aresta->getNoDestino()->getId())
+                cout << "("<< no->getId() << "," << aresta->getNoDestino()->getId() << ")" << " ";
+            noAux = primeiroNo;
+            while(noAux != nullptr)
+            {
+                noAux->setVisitado(false);
+                noAux = noAux->getProx();
+            }
+            aresta = aresta->getProx();
+        }
+        no = no->getProx();
+    }
+}
+
+/***********************************************
+ * ultiliza busca em profundidade (recursivamente)
+ * para identificar quais os nos compatilham do
+ * mesmo componente conexo passado pelo parametro
+ * inicial
+ * @param no: no que pertence a mesma componente
+ * do inicial
+ *        aIgnorada: aresta a ser deconsiderada
+ *        na busca
+ ***********************************************/
+void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
+{
+    if(!no->isVisitado())
+    {
+        no->setVisitado(true);
+        Aresta *aresta = no->getPrimAresta();
+        while(aresta != nullptr)
+        {
+            if (aresta != aIngorada)
+                auxArestasPonte(aresta->getNoDestino(), aIngorada);
+            aresta = aresta->getProx();
+        }
+    }
 }

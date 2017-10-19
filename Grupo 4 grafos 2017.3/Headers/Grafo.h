@@ -8,7 +8,7 @@
 using namespace std;
 
 class No;
-
+class Aresta;
 class Grafo
 {
 public:
@@ -48,6 +48,8 @@ public:
 	void nosDeArticulacao();
 	int componentesConexas(No *noIgnorado);
 	void auxComponentesConexas(No* no, No* noIgnorado);
+    void arestasPonte();
+    void auxArestasPonte(No *no, Aresta* aIngorada);
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();
