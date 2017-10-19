@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#define INFINITO 99999999
 
 /**********************************************************
  * Construtores sobrecarregados para criar um Grafo vazio
@@ -389,7 +390,6 @@ bool Grafo::ehPonderado()
 	string line;
 	getline(file, line); // Le a primeira linha com o numero de Nos
 	getline(file, line); // Le a segunda linha para identificar se o Grafo eh ponderado
-
 	stringstream ss(line);
 	int i, cont = 0;
 
@@ -1009,6 +1009,7 @@ void Grafo::arestasPonte()
     No* no = primeiroNo;
     No* noAux;
     Aresta* aresta;
+    cout << "Arestas ponte do grafo:"<< endl;
     while (no != nullptr)
     {
         aresta = no->getPrimAresta();
@@ -1028,6 +1029,7 @@ void Grafo::arestasPonte()
         }
         no = no->getProx();
     }
+    cout << endl;
 }
 
 /***********************************************
@@ -1054,3 +1056,4 @@ void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
         }
     }
 }
+

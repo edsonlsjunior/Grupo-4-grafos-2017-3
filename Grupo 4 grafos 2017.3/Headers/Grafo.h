@@ -50,6 +50,8 @@ public:
 	void auxComponentesConexas(No* no, No* noIgnorado);
     void arestasPonte();
     void auxArestasPonte(No *no, Aresta* aIngorada);
+    float **matrizFloyd();
+    int encontraIndice(int *vetor, int id);
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();
