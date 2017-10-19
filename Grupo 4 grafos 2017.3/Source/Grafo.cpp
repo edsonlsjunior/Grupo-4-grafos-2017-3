@@ -876,3 +876,30 @@ bool Grafo:: ehEuleriano()
     else
         return false;
 }
+
+/*********************************************
+ * Mostra a Árvore de Busca em Profundidade
+ * a partir do No informado
+ *********************************************/
+void Grafo::mostrarArvoreDeBuscaEmProfundidade(int idNo)
+{
+	No* n = procurarNo(idNo);
+	if((n != nullptr) && (!n->isVisitado()))
+		auxMostrarArvoreDeBuscaEmProfundidade(n);
+	cout << "Fim." << endl;
+}
+
+void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
+{
+	if(!no->isVisitado())
+	{
+		no->setVisitado(true);
+		cout << no->getId() << " -> ";
+		Aresta* a = no->getPrimAresta();
+		while(a != nullptr)
+		{
+			auxMostrarArvoreDeBuscaEmProfundidade(a->getNoDestino());
+			a = a->getProx();
+		}
+	}
+}
