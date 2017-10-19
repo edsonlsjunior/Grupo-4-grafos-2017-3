@@ -35,6 +35,7 @@ class Grafo
 		Grafo* copiarNosParaNovoGrafo();
 		bool verificaMultigrafo();
 		void mostrarGrafoComplementar();
+		Grafo* retornarGrafoComplementar();
 		void mostrarSequenciaDeGraus();
 		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
 		bool verificaBipartido();
@@ -45,6 +46,10 @@ class Grafo
 		void auxComponentesConexas(No* no);
 		bool ehEuleriano();
 		void mostrarArvoreDeBuscaEmProfundidade(int idNo);
+		Grafo* fechoTransitivoIndireto(int idNo);
+		Grafo* fechoTransitivoDireto(int idNo);
+		void fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoInverso);
+		void fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto);
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();

@@ -726,11 +726,8 @@ bool Grafo::verificaSeContemCiclo(No *n)
 	{
 		return false;
 	}
-<<<<<<< HEAD
-=======
 }
 
->>>>>>> 1966871071acfd14b54c0fe776a4dc52bae42284
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -912,4 +909,96 @@ void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
 		}
 	}
 }
+//RETORNA O GRAFO COMPLEMENTAR
+Grafo* Grafo::retornarGrafoComplementar()
+{
+	Grafo* g = this->copiarNosParaNovoGrafo();
+	No* noOriginal = this->primeiroNo;		// No para iterar no Grafo original
+	No* novoNoOrigem = g->primeiroNo;// Usado para manter a referencia do id do No de origem no Novo No
+	while(noOriginal != nullptr)
+	{
+		No* novoNoDestino = g->primeiroNo;		// No para iterar no novo Grafo
+		int grauSaidaNo = noOriginal->getGrauSaida();
+		int* idsDestinoOriginal = new int[grauSaidaNo];
+		Aresta* a = noOriginal->getPrimAresta();
+		while(a != nullptr)
+		{
+			for(int i = 0; i < grauSaidaNo; i++)
+			{
+				idsDestinoOriginal[i] = a->getIdNoDestino();
+				a = a->getProx();
+			}
+		}
 
+		while(novoNoDestino != nullptr)
+		{
+			if(grauSaidaNo == 0)
+			{
+				if((novoNoOrigem != novoNoDestino)
+				   && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+			else
+			{
+				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
+						idsDestinoOriginal, grauSaidaNo);
+
+				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
+				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
+			}
+
+			novoNoDestino = novoNoDestino->getProx();
+		}
+
+		noOriginal = noOriginal->getProx();
+		novoNoOrigem = novoNoOrigem->getProx();
+		delete[] idsDestinoOriginal;
+	}
+	return g;
+}
+// FECHO TRANSITIVO
+
+  	Grafo* Grafo::fechoTransitivoIndireto(int idNo){
+    Grafo* fechoIndireto = new Grafo(true);
+    fechoTransitivoIndiretoAux(idNo,fechoIndireto,retornarGrafoComplementar());
+    return fechoIndireto;
+}
+
+Grafo* Grafo::fechoTransitivoDireto(int idNo){
+    Grafo* fechoDireto = new Grafo(true);
+    fechoTransitivoDiretoAux(idNo,fechoDireto);
+    return fechoDireto;
+}
+
+
+
+ void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoComplementar){
+    No* n = grafoComplementar->procurarNo(idNo);
+    if(n != nullptr){
+        if(fechoIndireto->procurarNo(idNo) == nullptr){
+            Aresta *a = n->getPrimAresta();
+            fechoIndireto->inserirNo(n->getId());
+            while(a != nullptr){
+                fechoTransitivoIndiretoAux(a->getIdNoDestino(),fechoIndireto,grafoComplementar);
+                a = a->getProx();
+            }
+        n = n->getProx();
+        }
+    }
+}
+
+void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto){
+    No* n = fechoDireto->procurarNo(idNo);
+    if(n != nullptr){
+        if(fechoDireto->procurarNo(idNo) == nullptr){
+            Aresta *a = n->getPrimAresta();
+            fechoDireto->inserirNo(n->getId());
+            while(a != nullptr){
+                fechoTransitivoDiretoAux(a->getIdNoDestino(),fechoDireto);
+                a = a->getProx();
+            }
+        n = n->getProx();
+        }
+    }
+}
