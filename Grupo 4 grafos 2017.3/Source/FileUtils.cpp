@@ -22,23 +22,15 @@ Grafo* FileUtils::retornarGrafo()
 	leitor.open(argv[1]);
 	int n, no1, no2, peso;
 	leitor >> n;
-	Grafo *g = new Grafo(n);
+	Grafo *g = new Grafo(n, false);
 	g->setEhMultigrafo(false);
 
 	if(g->ehPonderado())
-	{
 		while(leitor >> no1 >> no2 >> peso)
-		{
 			g->inserirArestaGrafo(no1, no2, peso);
-		}
-	}
 	else
-	{
 		while(leitor >> no1 >> no2)
-		{
 			g->inserirArestaGrafo(no1, no2, 1);
-		}
-	}
 
 	leitor.close();
 	return g;

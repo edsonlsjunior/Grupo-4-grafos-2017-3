@@ -11,7 +11,7 @@
  * (1o construtor) ou um Grafo com n nos (2o construtor)
  * e destrutor do grafo
  **********************************************************/
-Grafo::Grafo()
+Grafo::Grafo(bool direcionado)
 {
 	ordem = 0;
 	grau = 0;
@@ -19,18 +19,18 @@ Grafo::Grafo()
 	maiorIdAresta = 0;
 	primeiroNo = nullptr;
 	ultimoNo = nullptr;
-	direcionado = true;
+	this->direcionado = direcionado;
 	ehMultigrafo = false;
 	cout << "Grafo vazio criado." << endl;
 }
 
-Grafo::Grafo(int n)
+Grafo::Grafo(int n, bool direcionado)
 {
 	ordem = 0;
 	grau = 0;
 	maiorIdNo = 0;
 	maiorIdAresta = 0;
-	direcionado = true;
+	this->direcionado = direcionado;
 	ehMultigrafo = false;
 	for(int i = 0; i < n; i++)
 		inserirNo();
@@ -201,7 +201,7 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 		if(grauNo1 > this->grau)
 			this->grau = grauNo1;
 
-		if(this->ehDirecionado() == false)
+		if(!(this->direcionado) && !noDestino->existeAresta(noOrigem->getId(), pesoAresta))
 		{
 			maiorIdAresta++;
 			noDestino->inserirArestaNo(maiorIdAresta, noOrigem, pesoAresta);
@@ -210,6 +210,7 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 				this->grau = grauNo2;
 		}
 	}
+
 }
 
 /*********************************************************
@@ -406,7 +407,7 @@ bool Grafo::ehPonderado()
  *********************************************/
 void Grafo::mostrarVizinhancaAberta(int idNo)
 {
-	Grafo* g = new Grafo();
+	Grafo* g = new Grafo(this->direcionado);
 	No* noCentral = procurarNo(idNo);
 	Aresta* aresta = nullptr;	// Arestas saindo de n
 	if(noCentral != nullptr)
@@ -431,7 +432,7 @@ void Grafo::mostrarVizinhancaAberta(int idNo)
  *********************************************/
 void Grafo::mostrarVizinhancaFechada(int idNo)
 {
-	Grafo* g = new Grafo();
+	Grafo* g = new Grafo(this->direcionado);
 	No* noCentral = procurarNo(idNo);
 	Aresta* a = nullptr;	// Arestas saindo de n
 	if(noCentral != nullptr)
@@ -516,7 +517,7 @@ bool Grafo::verificaMultigrafo()
  *********************************************************/
 Grafo* Grafo::copiarNosParaNovoGrafo()
 {
-	Grafo* g = new Grafo();		// Novo Grafo
+	Grafo* g = new Grafo(this->direcionado);		// Novo Grafo
 	No* n = this->primeiroNo;	// No para iterar no Grafo original
 
 	while(n != nullptr)
@@ -616,7 +617,7 @@ void Grafo::mostrarSubGrafoInduzido(int idsNos[], int qtdNos)
 	}
 	// Fim da ordenacao
 
-	Grafo* g = new Grafo();
+	Grafo* g = new Grafo(this->direcionado);
 
 	// Insere Nos com ids iguais aos do Grafo original
 	for(int i = 0; i < qtdNos; i++)
@@ -741,13 +742,13 @@ bool menorPesoAresta(Aresta *a, Aresta* b)
  */
 void Grafo::mostrarArvoreGeradoraMinima()
 {
-	typedef struct	// 
-	{				// 
+	typedef struct		//
+	{						//
 			int idNo;	// Struct auxiliar utilizada na inserção de Arestas
-			int val;	//
-	} NoAux;		//
+			int val;		//
+	} NoAux;				//
 
-	Grafo* g = new Grafo();
+	Grafo* g = new Grafo(this->direcionado);
 	No* n = this->primeiroNo;
 	int ordemGrafo = this->ordem;
 
@@ -761,26 +762,26 @@ void Grafo::mostrarArvoreGeradoraMinima()
 	while(n != nullptr)
 	{
 		idNo = n->getId();			//
-		g->inserirNo(idNo);		// Preenche o vetor auxiliar com todos os Nos
-		vetNosAux[i].idNo = idNo;// do Grafo e marcando seu 'val' com o valor de seu 'id'
+		g->inserirNo(idNo);			// Preenche o vetor auxiliar com todos os Nos
+		vetNosAux[i].idNo = idNo;	// do Grafo e marcando seu 'val' com o valor de seu 'id'
 		vetNosAux[i].val = idNo;	//
 
 		a = n->getPrimAresta();
 		while(a != nullptr)
 		{
 			vetArestas.push_back(a);	// Preenche o vetor de Arestas
-			a = a->getProx();			// com as Arestas do Grafo original
+			a = a->getProx();				// com as Arestas do Grafo original
 		}
 		i++;
 		n = n->getProx();
 	}
 
-	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);// Ordena as Arestas
+	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);	// Ordena as Arestas
 
-	int j, menor, maior, contArestas = 0;				// Variáveis de controle
+	int j, menor, maior, contArestas = 0;										// Variáveis de controle
 	int idNoOrigem, idNoDestino, valNoOrigem = 0, valNoDestino = 0;	//
 
-	for(i = 0; contArestas < ordemGrafo - 1; i++)// Enquanto não houverem (n-1) Arestas no Grafo...
+	for(i = 0; contArestas < ordemGrafo - 1; i++)	// Enquanto não houverem (n-1) Arestas no Grafo...
 	{
 		idNoOrigem = vetArestas[i]->getIdNoOrigem();
 		idNoDestino = vetArestas[i]->getIdNoDestino();
@@ -788,7 +789,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		for(j = 0; j < ordemGrafo; j++)					// Percorre todos os Nos
 		{
 			if(vetNosAux[j].idNo == idNoOrigem)
-				valNoOrigem = vetNosAux[j].val;// Obtém o 'val' do No de Origem da iteração atual
+				valNoOrigem = vetNosAux[j].val;	// Obtém o 'val' do No de Origem da iteração atual
 			if(vetNosAux[j].idNo == idNoDestino)
 				valNoDestino = vetNosAux[j].val;	// Obtém o 'val' do No de Destino da iteração atual
 			if((valNoOrigem != 0) && (valNoDestino != 0))
@@ -799,13 +800,13 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		{
 			g->inserirArestaGrafo(g->procurarNo(idNoOrigem),
 			      g->procurarNo(idNoDestino), vetArestas[i]->getPeso());// Insere a Aresta
-			contArestas++;								// Incrementa o contador
+			contArestas++;		// Incrementa o contador
 			menor = valNoOrigem < valNoDestino ? valNoOrigem : valNoDestino;
 			maior = valNoOrigem > valNoDestino ? valNoOrigem : valNoDestino;
 
 			for(j = 0; j < ordemGrafo; j++)		//
-				if(vetNosAux[j].val == maior)	// Normaliza os 'val' dos dois Nos para ser igual ao menor 'val'
-					vetNosAux[j].val = menor;	//
+				if(vetNosAux[j].val == maior)		// Normaliza os 'val' dos dois Nos para ser igual ao menor 'val'
+					vetNosAux[j].val = menor;		//
 		}
 
 		valNoOrigem = valNoDestino = 0;		// Reseta o 'val' dos Nos

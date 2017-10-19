@@ -13,8 +13,8 @@ class Grafo
 {
 	public:
 		// Funcoes relacionadas ao Grafo
-		Grafo();
-		Grafo(int n);
+		Grafo(bool direcionado);
+		Grafo(int n, bool direcionado);
 		~Grafo();
 		void decrementarOrdem();
 		void incrementarOrdem();
