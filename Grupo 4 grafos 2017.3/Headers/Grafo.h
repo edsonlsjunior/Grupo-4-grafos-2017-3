@@ -58,6 +58,8 @@ public:
     void auxArestasPonte(No *no, Aresta* aIngorada);
     float **matrizFloyd();
     int encontraIndice(int *vetor, int id);
+    void caminhoMinimo(int idNo1, int idNo2, bool algoritmo);
+    void dadosDeExcentricidade();
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();

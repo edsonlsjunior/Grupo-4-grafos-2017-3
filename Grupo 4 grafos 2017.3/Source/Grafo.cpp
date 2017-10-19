@@ -1200,4 +1200,83 @@ int Grafo::encontraIndice(int *vetor, int id)
             return i;
     }
     cout << "indice incorreto em encontraIndice " << id;
+    return -1;
+}
+
+void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
+{//bool true pra floyd e false pra dijkstra
+    if (algoritmo)
+    {
+        float **matriz = matrizFloyd();
+        int * vetor = new int(ordem);
+        No *no = primeiroNo;
+        for (int i = 0; i < ordem; i++)
+        {
+            vetor[i] = no->getId();
+            no= no->getProx();
+        }
+        idNo1 = encontraIndice(vetor, idNo1);
+        idNo2 = encontraIndice(vetor, idNo2);
+        if (idNo1 != -1 && idNo2 != -1)
+        {
+            cout << "Caminho minimo entre " << vetor[idNo1] << " e " << vetor[idNo2] <<" : " << matriz[idNo1][idNo2] << endl;
+        }
+        else
+        {
+            cout << "indices inseridos incorretamente." << endl;
+        }
+        delete []matriz;
+    } else
+    {
+        cout << "Dijkstra ainda nao implementado!" << endl;
+    }
+}
+
+void Grafo::dadosDeExcentricidade()
+{
+    if (componentesConexas() == 1)
+    {
+        float **matriz = this->matrizFloyd();
+        int vetor[ordem];
+        float vetorExcentricidade[ordem];
+        No *no = primeiroNo;
+        for (int i = 0; i < ordem; i++)
+        {
+            vetor[i] = no->getId();
+            no= no->getProx();
+        }
+        for (int i = 0; i < ordem; i++)
+        {
+            vetorExcentricidade[i] = 0;
+            for (int j = 0; j < ordem; j++)
+            {
+                if (matriz[i][j] > vetorExcentricidade[i])
+                    vetorExcentricidade[i] = matriz[i][j];
+            }
+        }
+        float raio = vetorExcentricidade[0];
+        float diametro = vetorExcentricidade[0];
+        for (int i = 0; i < ordem; i++)
+        {
+            if (vetorExcentricidade[i] > diametro)
+                diametro = vetorExcentricidade[i];
+            if (vetorExcentricidade[i] < raio)
+                raio = vetorExcentricidade[i];
+        }
+        cout << "Raio do grafo: " << raio << endl;
+        cout << "Diametro do grafo: " << diametro << endl;
+        cout << "Centro do grafo: ";
+        for (int i = 0; i < ordem; i++)
+        {
+            if (raio == vetorExcentricidade[i])
+                cout << noNaPosicao(i)->getId() << " ";
+        }
+        cout << endl << "Periferia do grafo: ";
+        for (int i = 0; i < ordem; i++)
+        {
+            if (diametro == vetorExcentricidade[i])
+                cout << noNaPosicao(i)->getId() << " ";
+        }
+        delete []matriz;
+    }
 }
