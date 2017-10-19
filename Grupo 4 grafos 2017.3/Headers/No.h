@@ -22,8 +22,8 @@ class No
 		int getGrau();
 		int getGrauEntrada();
 		int getGrauSaida();
-		void incrementarGrau();		// Apenas para Grafos Não-Direcionados
-		void decrementarGrau();		// Apenas para Grafos Não-Direcionados
+		void incrementarGrau();		// Apenas para Grafos Nï¿½o-Direcionados
+		void decrementarGrau();		// Apenas para Grafos Nï¿½o-Direcionados
 		void incrementarGrauEntrada();
 		void incrementarGrauSaida();
 		void decrementarGrauEntrada();
@@ -42,15 +42,18 @@ class No
 		void setUltAresta(Aresta *a);
 		void inserirArestaNo(int id, No* no2, int pesoAresta);
 
+		bool isVisitado() const;
+		void setVisitado(bool visitado);
 
-	private:
+private:
 		int id;						// Id do No
 		int grauSaida;				// Numero de Arestas saindo do No
 		int grauEntrada;			// Numero de Arestas que incidem no No
+		bool visitado;
 		Grafo* grafo;				// Grafo ao qual o No pertence
 		No *proximo;				// Proximo No da lista
-		Aresta *primAresta;			// Primeira Aresta ligada ao No da lista
-		Aresta *ultAresta;			// Ultima Aresta ligada ao No da lista
+		Aresta* primAresta;		// Primeira Aresta ligada ao No da lista
+		Aresta* ultAresta;		// Ultima Aresta ligada ao No da lista
 };
 
 #endif /* HEADERS_NO_H_ */

@@ -13,6 +13,7 @@ No::No(int id, Grafo* grafo)
 	ultAresta = nullptr;
 	grauEntrada = 0;
 	grauSaida = 0;
+    visitado = false;
 	grafo->incrementarOrdem();
 }
 
@@ -93,19 +94,17 @@ int No::getGrau()
 	if(grafo->ehDirecionado())
 		return this->grauSaida + this->grauEntrada;
 	else
-		return this->grauSaida; // Neste caso, grauEntrada = grauSaida
+		return this->grauSaida; // Neste caso, grauEntrada = grauSaida = grau
 }
 
 /******************************************
- * (Grafo N�o-Direcionado)
+ * (Grafo Não-Direcionado)
  * Incrementa o Grau do No em uma unidade
  ******************************************/
 void No::incrementarGrau()
 {
 	if(grafo->ehDirecionado() == false)
-		cout
-		        << "O Grafo nao e' direcionado. Incremente o Grau de Entrada ou Saida"
-		        << endl;
+		cout << "O Grafo nao e' direcionado. Incremente o Grau de Entrada ou Saida" << endl;
 	else
 	{
 		this->grauSaida++;
@@ -114,15 +113,13 @@ void No::incrementarGrau()
 }
 
 /******************************************
- * (Grafo N�o-Direcionado)
+ * (Grafo Não-Direcionado)
  * Decrementa o Grau do No em uma unidade
  ******************************************/
 void No::decrementarGrau()
 {
 	if(grafo->ehDirecionado() == false)
-		cout
-		        << "O Grafo nao e' direcionado. Decremente o Grau de Entrada ou Saida"
-		        << endl;
+		cout << "O Grafo nao e' direcionado. Decremente o Grau de Entrada ou Saida" << endl;
 	else
 	{
 		this->grauSaida--;
@@ -144,8 +141,6 @@ int No::getGrauEntrada()
 void No::incrementarGrauEntrada()
 {
 	this->grauEntrada++;
-	if(grafo->ehDirecionado() == false)
-		this->grauSaida++;
 }
 
 /*****************************************************
@@ -154,8 +149,6 @@ void No::incrementarGrauEntrada()
 void No::decrementarGrauEntrada()
 {
 	this->grauEntrada--;
-	if(grafo->ehDirecionado() == false)
-		this->grauSaida--;
 }
 
 /*********************************************
@@ -172,8 +165,6 @@ int No::getGrauSaida()
 void No::incrementarGrauSaida()
 {
 	this->grauSaida++;
-	if(grafo->ehDirecionado() == false)
-		this->grauEntrada--;
 }
 
 /****************************************************
@@ -182,8 +173,6 @@ void No::incrementarGrauSaida()
 void No::decrementarGrauSaida()
 {
 	this->grauSaida--;
-	if(grafo->ehDirecionado() == false)
-		this->grauEntrada--;
 }
 
 /************************************************
@@ -248,7 +237,7 @@ void No::mostrarNosAdjacentes()
 {
 	Aresta *arestaAuxiliar = primAresta;
 	string adj = "";
-	for(int i = 0; i < grauSaida; i++)
+	while(arestaAuxiliar != nullptr)
 	{
 		adj += " " + to_string(arestaAuxiliar->getIdNoDestino());
 		arestaAuxiliar = arestaAuxiliar->getProx();
@@ -278,17 +267,16 @@ bool No::existeAresta(int idNoDestino, int peso)
 
 /*****************************************************
  * Se existir, retorna uma Aresta para o No de destino
- * que tenha o peso informado. Se n�o, retorna NULL
+ * que tenha o peso informado. Se não, retorna NULL
  *
- * ATEN��O!!! Se houver mais de uma Aresta com o mesmo
+ * ATENÇÃO!!! Se houver mais de uma Aresta com o mesmo
  * Peso e mesmo No Destino, apenas uma sera' retornada
  *****************************************************/
 Aresta* No::getAresta(int idNoDestino, int peso)
 {
 	Aresta* a = this->primAresta;
 
-	while((a != nullptr) && (a->getIdNoDestino() != idNoDestino)
-	        && (a->getPeso() == peso))
+	while((a != nullptr) && ((a->getIdNoDestino() != idNoDestino) || (a->getPeso() != peso)))
 		a = a->getProx();
 
 	return a;
@@ -318,5 +306,13 @@ bool No::existeDentroDoVetor(int idsNos[], int tamanhoVetor)
 		if(idNoProcurado == idsNos[i])
 			noExisteNoArray = true;
 	return noExisteNoArray;
+}
+
+bool No::isVisitado() const {
+    return visitado;
+}
+
+void No::setVisitado(bool visitado) {
+    No::visitado = visitado;
 }
 
