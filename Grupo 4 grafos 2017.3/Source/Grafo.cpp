@@ -447,7 +447,7 @@ void Grafo::mostrarVizinhancaFechada(int idNo)
 			g->inserirArestaGrafo(g->primeiroNo, a->getNoDestino(), a->getPeso());
 			if(g->ehDirecionado() == false)
 				g->inserirArestaGrafo(a->getNoDestino(), g->primeiroNo,
-									  a->getPeso());
+				      a->getPeso());
 
 			a = a->getProx();
 		}
@@ -485,7 +485,7 @@ void Grafo::adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral)
 					grafo->inserirArestaGrafo(n1->getId(), x->getId(), b->getPeso());
 					if(grafo->ehDirecionado() == false)
 						grafo->inserirArestaGrafo(x->getId(), n1->getId(),
-												  b->getPeso());
+						      b->getPeso());
 				}
 				b = b->getProx();
 			}
@@ -557,16 +557,16 @@ void Grafo::mostrarGrafoComplementar()
 			if(grauSaidaNo == 0)
 			{
 				if((novoNoOrigem != novoNoDestino)
-				   && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				      && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 			else
 			{
 				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
-						idsDestinoOriginal, grauSaidaNo);
+				      idsDestinoOriginal, grauSaidaNo);
 
 				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
-				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				      && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 
@@ -726,11 +726,7 @@ bool Grafo::verificaSeContemCiclo(No *n)
 	{
 		return false;
 	}
-	<<<<<<< HEAD
-			=======
 }
-
->>>>>>> 1966871071acfd14b54c0fe776a4dc52bae42284
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -747,8 +743,8 @@ void Grafo::mostrarArvoreGeradoraMinima()
 {
 	typedef struct		//
 	{						//
-		int idNo;	// Struct auxiliar utilizada na inserção de Arestas
-		int val;		//
+			int idNo;	// Struct auxiliar utilizada na inserção de Arestas
+			int val;		//
 	} NoAux;				//
 
 	Grafo* g = new Grafo(this->direcionado);
@@ -802,7 +798,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		if(valNoOrigem != valNoDestino)// Se os 'val' de Origem e Destino forem diferentes... (garante a não-formação de ciclos)
 		{
 			g->inserirArestaGrafo(g->procurarNo(idNoOrigem),
-								  g->procurarNo(idNoDestino), vetArestas[i]->getPeso());// Insere a Aresta
+			      g->procurarNo(idNoDestino), vetArestas[i]->getPeso());// Insere a Aresta
 			contArestas++;		// Incrementa o contador
 			menor = valNoOrigem < valNoDestino ? valNoOrigem : valNoDestino;
 			maior = valNoOrigem > valNoDestino ? valNoOrigem : valNoDestino;

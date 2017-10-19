@@ -22,40 +22,18 @@ Grafo* FileUtils::retornarGrafo()
 	leitor.open(argv[1]);
 	int n, no1, no2, peso;
 	leitor >> n;
-	Grafo *g = new Grafo(n);
+	Grafo *g = new Grafo(n, false);
 	g->setEhMultigrafo(false);
-	while(leitor >> no1 >> no2 >> peso)
-	{
-		g->inserirArestaGrafo(no1, no2, peso);
-	}
+
+	if(g->ehPonderado())
+		while(leitor >> no1 >> no2 >> peso)
+			g->inserirArestaGrafo(no1, no2, peso);
+	else
+		while(leitor >> no1 >> no2)
+			g->inserirArestaGrafo(no1, no2, 1);
+
 	leitor.close();
 	return g;
-
-//	ifstream leitor;
-//	leitor.open(argv[1]);
-//	string n;
-//	int no1, no2, peso;
-//	getline(leitor, n);
-//	Grafo *g = new Grafo(stoi(n));
-//
-//	string line;
-//	getline(leitor, line);
-//	stringstream ss(line);
-//	int contParametros = 0, i;
-//
-//	while(ss >> i)
-//		contParametros++;
-//
-//	if(contParametros == 3)
-//	{
-//			while(leitor >> no1 >> no2 >> peso)
-//			{
-//				cout << no1 << " " << no2 << " " << peso << endl;
-//				g->inserirArestaGrafo(no1, no2, peso);
-//			}
-//	}
-//
-//	return g;
 }
 
 void FileUtils::salvarGrafo(Grafo *g) //incompleto porque ainda nao ha forma de pegar as informacoes do grafo
