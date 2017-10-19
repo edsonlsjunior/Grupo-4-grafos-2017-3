@@ -42,8 +42,11 @@ class Grafo
 		bool verificaSeContemCiclo(No* n);
 		void mostrarArvoreGeradoraMinima();
         int componentesConexas();
+		int componentesConexas(No *noIgnorado);
+		void auxComponentesConexas(No* no, No* noIgnorado);
         void auxComponentesConexas(No* no);
 		bool ehEuleriano();
+		void verticeArticulacao();
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();
