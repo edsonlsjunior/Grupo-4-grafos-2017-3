@@ -1205,16 +1205,17 @@ int Grafo::encontraIndice(int *vetor, int id)
 
 void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
 {//bool true pra floyd e false pra dijkstra
+    int vetor[ordem];
+    No *no = primeiroNo;
+    for (int i = 0; i < ordem; i++)
+    {
+        vetor[i] = no->getId();
+        no= no->getProx();
+    }
     if (algoritmo)
     {
         float **matriz = matrizFloyd();
-        int * vetor = new int(ordem);
-        No *no = primeiroNo;
-        for (int i = 0; i < ordem; i++)
-        {
-            vetor[i] = no->getId();
-            no= no->getProx();
-        }
+
         idNo1 = encontraIndice(vetor, idNo1);
         idNo2 = encontraIndice(vetor, idNo2);
         if (idNo1 != -1 && idNo2 != -1)
@@ -1228,7 +1229,8 @@ void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
         delete []matriz;
     } else
     {
-        cout << "Dijkstra ainda nao implementado!" << endl;
+        float *distancias = dijsktra(idNo1);
+        cout << "Caminho minimo entre " << idNo1 << " e " << idNo2 <<" : " << distancias[encontraIndice(vetor, idNo2)]<< endl;
     }
 }
 
@@ -1279,4 +1281,55 @@ void Grafo::dadosDeExcentricidade()
         }
         delete []matriz;
     }
+}
+
+float* Grafo::dijsktra(int idOrigem){
+    float *distancias = new float (ordem);
+    int solucao[ordem];
+    No* alcancaveis[ordem];
+    int vetorDeIndices[ordem];
+    No *no = primeiroNo;
+    for (int i = 0; i < ordem; i++)
+    {
+        vetorDeIndices[i] = no->getId();
+        no= no->getProx();
+    }
+    int controleIndice;
+    float menorDist = INFINITO;
+    for(int j = 0; j < ordem; j++){
+        solucao[j]= -1;
+        distancias[j] = INFINITO;
+        alcancaveis[j] = nullptr;
+    }
+
+    Aresta* auxAresta;
+    No* auxNo = procurarNo(idOrigem);
+
+    controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+    alcancaveis[controleIndice] = auxNo;
+    distancias[controleIndice] = 0;
+
+    for(int i = 0; i < ordem; i++){
+        menorDist = INFINITO;
+        for(int j = 0; j < ordem; j++){
+            if(menorDist > distancias[j] && solucao[j] == -1){
+                menorDist = distancias[j];
+                auxNo = alcancaveis[j];
+            }
+        }
+        controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+        solucao[controleIndice] = 1;
+
+        auxAresta = auxNo->getPrimAresta();
+        while(auxAresta!= nullptr){
+            No* auxNo2 =  auxAresta->getNoDestino();
+            int controleIndice2 = encontraIndice(vetorDeIndices, auxNo2->getId());
+            if(solucao[controleIndice2] == -1 && (distancias[controleIndice2] > (distancias [controleIndice] + auxAresta->getPeso()))){
+                distancias[controleIndice2] = (distancias[controleIndice] + auxAresta->getPeso());
+                alcancaveis[controleIndice2] = auxNo2;
+            }
+            auxAresta = auxAresta->getProx();
+        }
+    }
+    return distancias;
 }

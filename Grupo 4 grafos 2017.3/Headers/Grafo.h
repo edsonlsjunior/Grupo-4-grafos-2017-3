@@ -60,6 +60,7 @@ public:
     int encontraIndice(int *vetor, int id);
     void caminhoMinimo(int idNo1, int idNo2, bool algoritmo);
     void dadosDeExcentricidade();
+    float* dijsktra(int idOrigem);
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();
