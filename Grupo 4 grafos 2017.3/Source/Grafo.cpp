@@ -1149,6 +1149,10 @@ void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
     }
 }
 
+/*********************************************
+ * algortimo de floyd para caminhos minimos
+ * @return: matriz de caminhos minimos
+ *********************************************/
 float ** Grafo::matrizFloyd(){
     int *vetorDeIndices = new int(ordem);
     float **matriz = new float * [ordem];
@@ -1191,6 +1195,15 @@ float ** Grafo::matrizFloyd(){
     return matriz;
 }
 
+
+/*********************************************
+ * funcao auxiliar ce controle de indices,
+ * rebendo o id original do no e retornando
+ * sua posicao na lista
+ * @param vetor: o vetor que normaliza os indices
+ *        id: o id original do no
+ * @return: a posicao do no na lista do grafo
+ *********************************************/
 int Grafo::encontraIndice(int *vetor, int id)
 {
     int i;
@@ -1203,6 +1216,13 @@ int Grafo::encontraIndice(int *vetor, int id)
     return -1;
 }
 
+/*********************************************
+ * funcao auxiliar que chama o floyd ou disjktra
+ * para exibir o caminho minimo entre dois nos
+ * @param: idNo1 primeiro no
+ *         idNo2: segundo no
+ *         algoritmo: 1 para floyd e 0 para dijkstra
+ *********************************************/
 void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
 {//bool true pra floyd e false pra dijkstra
     int vetor[ordem];
@@ -1234,6 +1254,11 @@ void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
     }
 }
 
+
+/*********************************************
+ * exibe raio, diametro, centro e periferia do
+ * grafo
+ *********************************************/
 void Grafo::dadosDeExcentricidade()
 {
     if (componentesConexas() == 1)
@@ -1283,6 +1308,15 @@ void Grafo::dadosDeExcentricidade()
     }
 }
 
+/*********************************************
+ * algoritmo de dijsktra que recebe um no e
+ * calcula a distancia minima do no recebido
+ * a todos os outros
+ * @param idOrigem: id do no para conhecer as
+ * distancias
+ * @return vetor float com todas as distancias
+ * minimas
+ *********************************************/
 float* Grafo::dijsktra(int idOrigem){
     float *distancias = new float (ordem);
     int solucao[ordem];
