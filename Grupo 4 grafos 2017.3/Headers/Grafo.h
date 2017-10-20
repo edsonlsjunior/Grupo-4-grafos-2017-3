@@ -58,6 +58,7 @@ class Grafo
 		void caminhoMinimo(int idNo1, int idNo2, bool algoritmo);
 		void dadosDeExcentricidade();
 		void mostrarComponentesConexas();
+		float* dijsktra(int idOrigem);
 
 		// Funcoes relacionadas a Nos
 		void inserirNo();

@@ -982,7 +982,8 @@ Grafo* Grafo::fechoTransitivoDireto(int idNo)
 	return fechoDireto;
 }
 
-void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoComplementar)
+void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto,
+      Grafo* grafoComplementar)
 {
 	No* n = grafoComplementar->procurarNo(idNo);
 	if(n != nullptr)
@@ -1162,6 +1163,10 @@ void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
 	}
 }
 
+/*********************************************
+ * algortimo de floyd para caminhos minimos
+ * @return: matriz de caminhos minimos
+ *********************************************/
 float ** Grafo::matrizFloyd()
 {
 	int *vetorDeIndices = new int(ordem);
@@ -1193,7 +1198,8 @@ float ** Grafo::matrizFloyd()
 		while(auxAresta != nullptr)
 		{
 			No* auxDestino = auxAresta->getNoDestino();
-			matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
+			matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(
+			      vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
 			auxAresta = auxAresta->getProx();
 		}
 		auxNo = auxNo->getProx();
@@ -1212,6 +1218,14 @@ float ** Grafo::matrizFloyd()
 	return matriz;
 }
 
+/*********************************************
+ * funcao auxiliar ce controle de indices,
+ * rebendo o id original do no e retornando
+ * sua posicao na lista
+ * @param vetor: o vetor que normaliza os indices
+ *        id: o id original do no
+ * @return: a posicao do no na lista do grafo
+ *********************************************/
 int Grafo::encontraIndice(int *vetor, int id)
 {
 	int i;
@@ -1254,8 +1268,12 @@ void Grafo::caminhoMinimo(int idNo1, int idNo2, bool algoritmo)
 	{
 		cout << "Dijkstra ainda nao implementado!" << endl;
 	}
-}
 
+}
+/*********************************************
+ * exibe raio, diametro, centro e periferia do
+ * grafo
+ *********************************************/
 void Grafo::dadosDeExcentricidade()
 {
 	if(componentesConexas() == 1)
@@ -1330,7 +1348,7 @@ void Grafo::mostrarComponentesConexas()
 
 bool Grafo::auxMostrarComponentesConexas(No* no)
 {
-	bool noJaVisitado = true;		// Retorna para a função principal se o No informado já havia sido visitado
+	bool noJaVisitado = true;// Retorna para a função principal se o No informado já havia sido visitado
 	if(!no->isVisitado())
 	{
 		noJaVisitado = false;
@@ -1357,4 +1375,74 @@ void Grafo::definirTodosNosDoGrafoComoNaoVisitados()
 		no->setVisitado(false);
 		no = no->getProx();
 	}
+}
+
+/*********************************************
+ * algoritmo de dijsktra que recebe um no e
+ * calcula a distancia minima do no recebido
+ * a todos os outros
+ * @param idOrigem: id do no para conhecer as
+ * distancias
+ * @return vetor float com todas as distancias
+ * minimas
+ *********************************************/
+float* Grafo::dijsktra(int idOrigem)
+{
+	float *distancias = new float(ordem);
+	int solucao[ordem];
+	No* alcancaveis[ordem];
+	int vetorDeIndices[ordem];
+	No *no = primeiroNo;
+	for(int i = 0; i < ordem; i++)
+	{
+		vetorDeIndices[i] = no->getId();
+		no = no->getProx();
+	}
+	int controleIndice;
+	float menorDist = INFINITO;
+	for(int j = 0; j < ordem; j++)
+	{
+		solucao[j] = -1;
+		distancias[j] = INFINITO;
+		alcancaveis[j] = nullptr;
+	}
+
+	Aresta* auxAresta;
+	No* auxNo = procurarNo(idOrigem);
+
+	controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+	alcancaveis[controleIndice] = auxNo;
+	distancias[controleIndice] = 0;
+
+	for(int i = 0; i < ordem; i++)
+	{
+		menorDist = INFINITO;
+		for(int j = 0; j < ordem; j++)
+		{
+			if(menorDist > distancias[j] && solucao[j] == -1)
+			{
+				menorDist = distancias[j];
+				auxNo = alcancaveis[j];
+			}
+		}
+		controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+		solucao[controleIndice] = 1;
+
+		auxAresta = auxNo->getPrimAresta();
+		while(auxAresta != nullptr)
+		{
+			No* auxNo2 = auxAresta->getNoDestino();
+			int controleIndice2 = encontraIndice(vetorDeIndices, auxNo2->getId());
+			if(solucao[controleIndice2] == -1
+			      && (distancias[controleIndice2]
+			            > (distancias[controleIndice] + auxAresta->getPeso())))
+			{
+				distancias[controleIndice2] = (distancias[controleIndice]
+				      + auxAresta->getPeso());
+				alcancaveis[controleIndice2] = auxNo2;
+			}
+			auxAresta = auxAresta->getProx();
+		}
+	}
+	return distancias;
 }
