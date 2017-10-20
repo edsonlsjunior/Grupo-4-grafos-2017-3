@@ -11,47 +11,7 @@ class No;
 class Aresta;
 class Grafo
 {
-<<<<<<< HEAD
-	public:
-		// Funcoes relacionadas ao Grafo
-		Grafo(bool direcionado);
-		Grafo(int n, bool direcionado);
-		~Grafo();
-		void decrementarOrdem();
-		void incrementarOrdem();
-		void mostrarGrafo();
-		int getOrdem();
-		bool ehTrivial();
-		bool ehNulo();
-		bool ehKRegular(int k);
-		int ehKRegular();
-		bool ehDirecionado();
-		void setEhDirecionado(bool direcionado);
-		void setEhMultigrafo(bool tf);
-		bool ehCompleto();
-		bool ehPonderado();
-		void mostrarVizinhancaAberta(int idNo);
-		void mostrarVizinhancaFechada(int idNo);
-		void adicionarArestasEntreVizinhos(Grafo* grafo, No* noCentral);
-		Grafo* copiarNosParaNovoGrafo();
-		bool verificaMultigrafo();
-		void mostrarGrafoComplementar();
-		Grafo* retornarGrafoComplementar();
-		void mostrarSequenciaDeGraus();
-		void mostrarSubGrafoInduzido(int idsNos[], int qtdNos);
-		bool verificaBipartido();
-		bool auxVerificaBipartido(int ver, No* n, int* vet);
-		bool verificaSeContemCiclo(No* n);
-		void mostrarArvoreGeradoraMinima();
-		int componentesConexas();
-		void auxComponentesConexas(No* no);
-		bool ehEuleriano();
-		void mostrarArvoreDeBuscaEmProfundidade(int idNo);
-		Grafo* fechoTransitivoIndireto(int idNo);
-		Grafo* fechoTransitivoDireto(int idNo);
-		void fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoInverso);
-		void fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto);
-=======
+
 public:
 	// Funcoes relacionadas ao Grafo
 	Grafo(bool direcionado);
@@ -86,12 +46,21 @@ public:
 	void auxComponentesConexas(No* no);
 	bool ehEuleriano();
 	void mostrarArvoreDeBuscaEmProfundidade(int idNo);
+    Grafo* fechoTransitivoIndireto(int idNo);
+    Grafo* fechoTransitivoDireto(int idNo);
+    void fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoInverso);
+    void fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto);
+    Grafo* retornarGrafoComplementar();
 	void nosDeArticulacao();
 	int componentesConexas(No *noIgnorado);
 	void auxComponentesConexas(No* no, No* noIgnorado);
     void arestasPonte();
     void auxArestasPonte(No *no, Aresta* aIngorada);
->>>>>>> b3c365a48d23700a15d582858d9de28168668a68
+    float **matrizFloyd();
+    int encontraIndice(int *vetor, int id);
+    void caminhoMinimo(int idNo1, int idNo2, bool algoritmo);
+    void dadosDeExcentricidade();
+    float* dijsktra(int idOrigem);
 
 	// Funcoes relacionadas a Nos
 	void inserirNo();

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#define INFINITO 2147483647
 
 /**********************************************************
  * Construtores sobrecarregados para criar um Grafo vazio
@@ -389,7 +390,6 @@ bool Grafo::ehPonderado()
 	string line;
 	getline(file, line); // Le a primeira linha com o numero de Nos
 	getline(file, line); // Le a segunda linha para identificar se o Grafo eh ponderado
-
 	stringstream ss(line);
 	int i, cont = 0;
 
@@ -727,10 +727,6 @@ bool Grafo::verificaSeContemCiclo(No *n)
 		return false;
 	}
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> b3c365a48d23700a15d582858d9de28168668a68
 /******************************************************
  * Retorna true se a primeira Aresta tiver menor Peso
  * que a segunda, e false se o contrario acontecer
@@ -948,8 +944,6 @@ Grafo* Grafo::retornarGrafoComplementar()
 			{
 				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
 						idsDestinoOriginal, grauSaidaNo);
-
-<<<<<<< HEAD
 				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
 				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
@@ -995,23 +989,26 @@ Grafo* Grafo::fechoTransitivoDireto(int idNo){
     }
 }
 
-void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto){
+void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto)
+{
     No* n = fechoDireto->procurarNo(idNo);
     if(n != nullptr){
-        if(fechoDireto->procurarNo(idNo) == nullptr){
+        if(fechoDireto->procurarNo(idNo) == nullptr) {
             Aresta *a = n->getPrimAresta();
             fechoDireto->inserirNo(n->getId());
-            while(a != nullptr){
-                fechoTransitivoDiretoAux(a->getIdNoDestino(),fechoDireto);
+            while (a != nullptr) {
+                fechoTransitivoDiretoAux(a->getIdNoDestino(), fechoDireto);
                 a = a->getProx();
             }
-        n = n->getProx();
-=======
+            n = n->getProx();
+        }
+    }
+}
 /*********************************************
  * Informa ao usuario os ids dos nos de articulacao
  * @return void
  *********************************************/
-void Grafo::nosDeArticulacao ()
+void Grafo::nosDeArticulacao()
 {
     int i;
     int componentesInicias = componentesConexas();
@@ -1104,6 +1101,7 @@ void Grafo::arestasPonte()
     No* no = primeiroNo;
     No* noAux;
     Aresta* aresta;
+    cout << "Arestas ponte do grafo:"<< endl;
     while (no != nullptr)
     {
         aresta = no->getPrimAresta();
@@ -1123,6 +1121,7 @@ void Grafo::arestasPonte()
         }
         no = no->getProx();
     }
+    cout << endl;
 }
 
 /***********************************************
@@ -1146,7 +1145,225 @@ void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
             if (aresta != aIngorada)
                 auxArestasPonte(aresta->getNoDestino(), aIngorada);
             aresta = aresta->getProx();
->>>>>>> b3c365a48d23700a15d582858d9de28168668a68
         }
     }
+}
+
+/*********************************************
+ * algortimo de floyd para caminhos minimos
+ * @return: matriz de caminhos minimos
+ *********************************************/
+float ** Grafo::matrizFloyd(){
+    int *vetorDeIndices = new int(ordem);
+    float **matriz = new float * [ordem];
+    for(int c = 0; c < ordem; c++){
+        matriz[c] = new float[ordem];
+        for(int d = 0; d < ordem; d++){
+            if(c==d)
+                matriz[c][d] = 0;
+            else
+                matriz[c][d] = INFINITO;
+        }
+    }
+    No * auxNo = primeiroNo;
+    int i = 0;
+    while (auxNo != nullptr)
+    {
+        vetorDeIndices[i] = auxNo->getId();
+        auxNo = auxNo->getProx();
+        i++;
+    }
+    auxNo = primeiroNo;
+    Aresta * auxAresta = nullptr;
+    while(auxNo!=nullptr){
+        auxAresta = auxNo->getPrimAresta();
+        while(auxAresta!= nullptr){
+            No* auxDestino = auxAresta->getNoDestino();
+            matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
+            auxAresta = auxAresta->getProx();
+        }
+        auxNo = auxNo->getProx();
+    }
+    for(int k = 0; k < ordem; k++){
+        for(int a = 0; a < ordem; a++){
+            for(int b = 0; b < ordem; b++){
+                if (matriz[a][b] > matriz[a][k] + matriz[k][b])
+                    matriz[a][b] = matriz[a][k] + matriz[k][b];
+            }
+        }
+    }
+    return matriz;
+}
+
+
+/*********************************************
+ * funcao auxiliar ce controle de indices,
+ * rebendo o id original do no e retornando
+ * sua posicao na lista
+ * @param vetor: o vetor que normaliza os indices
+ *        id: o id original do no
+ * @return: a posicao do no na lista do grafo
+ *********************************************/
+int Grafo::encontraIndice(int *vetor, int id)
+{
+    int i;
+    for (i = 0; i < ordem; i++)
+    {
+        if (id == vetor[i])
+            return i;
+    }
+    cout << "indice incorreto em encontraIndice " << id;
+    return -1;
+}
+
+/*********************************************
+ * funcao auxiliar que chama o floyd ou disjktra
+ * para exibir o caminho minimo entre dois nos
+ * @param: idNo1 primeiro no
+ *         idNo2: segundo no
+ *         algoritmo: 1 para floyd e 0 para dijkstra
+ *********************************************/
+void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
+{//bool true pra floyd e false pra dijkstra
+    int vetor[ordem];
+    No *no = primeiroNo;
+    for (int i = 0; i < ordem; i++)
+    {
+        vetor[i] = no->getId();
+        no= no->getProx();
+    }
+    if (algoritmo)
+    {
+        float **matriz = matrizFloyd();
+
+        idNo1 = encontraIndice(vetor, idNo1);
+        idNo2 = encontraIndice(vetor, idNo2);
+        if (idNo1 != -1 && idNo2 != -1)
+        {
+            cout << "Caminho minimo entre " << vetor[idNo1] << " e " << vetor[idNo2] <<" : " << matriz[idNo1][idNo2] << endl;
+        }
+        else
+        {
+            cout << "indices inseridos incorretamente." << endl;
+        }
+        delete []matriz;
+    } else
+    {
+        float *distancias = dijsktra(idNo1);
+        cout << "Caminho minimo entre " << idNo1 << " e " << idNo2 <<" : " << distancias[encontraIndice(vetor, idNo2)]<< endl;
+    }
+}
+
+
+/*********************************************
+ * exibe raio, diametro, centro e periferia do
+ * grafo
+ *********************************************/
+void Grafo::dadosDeExcentricidade()
+{
+    if (componentesConexas() == 1)
+    {
+        float **matriz = this->matrizFloyd();
+        int vetor[ordem];
+        float vetorExcentricidade[ordem];
+        No *no = primeiroNo;
+        for (int i = 0; i < ordem; i++)
+        {
+            vetor[i] = no->getId();
+            no= no->getProx();
+        }
+        for (int i = 0; i < ordem; i++)
+        {
+            vetorExcentricidade[i] = 0;
+            for (int j = 0; j < ordem; j++)
+            {
+                if (matriz[i][j] > vetorExcentricidade[i])
+                    vetorExcentricidade[i] = matriz[i][j];
+            }
+        }
+        float raio = vetorExcentricidade[0];
+        float diametro = vetorExcentricidade[0];
+        for (int i = 0; i < ordem; i++)
+        {
+            if (vetorExcentricidade[i] > diametro)
+                diametro = vetorExcentricidade[i];
+            if (vetorExcentricidade[i] < raio)
+                raio = vetorExcentricidade[i];
+        }
+        cout << "Raio do grafo: " << raio << endl;
+        cout << "Diametro do grafo: " << diametro << endl;
+        cout << "Centro do grafo: ";
+        for (int i = 0; i < ordem; i++)
+        {
+            if (raio == vetorExcentricidade[i])
+                cout << noNaPosicao(i)->getId() << " ";
+        }
+        cout << endl << "Periferia do grafo: ";
+        for (int i = 0; i < ordem; i++)
+        {
+            if (diametro == vetorExcentricidade[i])
+                cout << noNaPosicao(i)->getId() << " ";
+        }
+        delete []matriz;
+    }
+}
+
+/*********************************************
+ * algoritmo de dijsktra que recebe um no e
+ * calcula a distancia minima do no recebido
+ * a todos os outros
+ * @param idOrigem: id do no para conhecer as
+ * distancias
+ * @return vetor float com todas as distancias
+ * minimas
+ *********************************************/
+float* Grafo::dijsktra(int idOrigem){
+    float *distancias = new float (ordem);
+    int solucao[ordem];
+    No* alcancaveis[ordem];
+    int vetorDeIndices[ordem];
+    No *no = primeiroNo;
+    for (int i = 0; i < ordem; i++)
+    {
+        vetorDeIndices[i] = no->getId();
+        no= no->getProx();
+    }
+    int controleIndice;
+    float menorDist = INFINITO;
+    for(int j = 0; j < ordem; j++){
+        solucao[j]= -1;
+        distancias[j] = INFINITO;
+        alcancaveis[j] = nullptr;
+    }
+
+    Aresta* auxAresta;
+    No* auxNo = procurarNo(idOrigem);
+
+    controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+    alcancaveis[controleIndice] = auxNo;
+    distancias[controleIndice] = 0;
+
+    for(int i = 0; i < ordem; i++){
+        menorDist = INFINITO;
+        for(int j = 0; j < ordem; j++){
+            if(menorDist > distancias[j] && solucao[j] == -1){
+                menorDist = distancias[j];
+                auxNo = alcancaveis[j];
+            }
+        }
+        controleIndice = encontraIndice(vetorDeIndices, auxNo->getId());
+        solucao[controleIndice] = 1;
+
+        auxAresta = auxNo->getPrimAresta();
+        while(auxAresta!= nullptr){
+            No* auxNo2 =  auxAresta->getNoDestino();
+            int controleIndice2 = encontraIndice(vetorDeIndices, auxNo2->getId());
+            if(solucao[controleIndice2] == -1 && (distancias[controleIndice2] > (distancias [controleIndice] + auxAresta->getPeso()))){
+                distancias[controleIndice2] = (distancias[controleIndice] + auxAresta->getPeso());
+                alcancaveis[controleIndice2] = auxNo2;
+            }
+            auxAresta = auxAresta->getProx();
+        }
+    }
+    return distancias;
 }
