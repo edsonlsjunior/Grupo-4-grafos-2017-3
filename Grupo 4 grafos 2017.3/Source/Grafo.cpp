@@ -65,6 +65,14 @@ void Grafo::incrementarOrdem()
 	this->ordem++;
 }
 
+/*********************************
+ *  Retorna o Grau do Grafo
+ *********************************/
+int Grafo::getGrau()
+{
+	return this->grau;
+}
+
 /*****************************************
  * Retorna o primeiro No do Grafo
  *****************************************/
@@ -152,7 +160,8 @@ void Grafo::excluirNo(int idNo)
 	if(del != nullptr)
 		delete del;
 	else
-		cout << "O No de id " << idNo << " nao pode ser excluido, pois nao foi encontrado." << endl;
+		cout << "O No de id " << idNo
+		      << " nao pode ser excluido, pois nao foi encontrado." << endl;
 }
 
 /********************************************************
@@ -202,7 +211,8 @@ void Grafo::inserirArestaGrafo(No* noOrigem, No* noDestino, int pesoAresta)
 		if(grauNo1 > this->grau)
 			this->grau = grauNo1;
 
-		if(!(this->direcionado) && !noDestino->existeAresta(noOrigem->getId(), pesoAresta))
+		if(!(this->direcionado)
+		      && !noDestino->existeAresta(noOrigem->getId(), pesoAresta))
 		{
 			maiorIdAresta++;
 			noDestino->inserirArestaNo(maiorIdAresta, noOrigem, pesoAresta);
@@ -267,10 +277,12 @@ void Grafo::mostrarGrafo()
 {
 	No* p = primeiroNo;
 
-	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau" << "	   Nos Adjacentes" << endl;
+	cout << setw(3) << "No" << setw(10) << "ID" << setw(10) << "Grau"
+	      << "	   Nos Adjacentes" << endl;
 	for(int i = 0; i < ordem; i++)
 	{
-		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10) << p->getGrau() << "	  ";
+		cout << setw(3) << i + 1 << setw(10) << p->getId() << setw(10)
+		      << p->getGrau() << "	  ";
 		p->mostrarNosAdjacentes();
 		cout << endl;
 		p = p->getProx();
@@ -762,7 +774,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 	{
 		idNo = n->getId();			//
 		g->inserirNo(idNo);			// Preenche o vetor auxiliar com todos os Nos
-		vetNosAux[i].idNo = idNo;	// do Grafo e marcando seu 'val' com o valor de seu 'id'
+		vetNosAux[i].idNo = idNo;// do Grafo e marcando seu 'val' com o valor de seu 'id'
 		vetNosAux[i].val = idNo;	//
 
 		a = n->getPrimAresta();
@@ -775,12 +787,12 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		n = n->getProx();
 	}
 
-	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);	// Ordena as Arestas
+	sort(vetArestas.begin(), vetArestas.end(), menorPesoAresta);// Ordena as Arestas
 
-	int j, menor, maior, contArestas = 0;										// Variáveis de controle
+	int j, menor, maior, contArestas = 0;					// Variáveis de controle
 	int idNoOrigem, idNoDestino, valNoOrigem = 0, valNoDestino = 0;	//
 
-	for(i = 0; contArestas < ordemGrafo - 1; i++)	// Enquanto não houverem (n-1) Arestas no Grafo...
+	for(i = 0; contArestas < ordemGrafo - 1; i++)// Enquanto não houverem (n-1) Arestas no Grafo...
 	{
 		idNoOrigem = vetArestas[i]->getIdNoOrigem();
 		idNoDestino = vetArestas[i]->getIdNoDestino();
@@ -788,7 +800,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 		for(j = 0; j < ordemGrafo; j++)					// Percorre todos os Nos
 		{
 			if(vetNosAux[j].idNo == idNoOrigem)
-				valNoOrigem = vetNosAux[j].val;	// Obtém o 'val' do No de Origem da iteração atual
+				valNoOrigem = vetNosAux[j].val;// Obtém o 'val' do No de Origem da iteração atual
 			if(vetNosAux[j].idNo == idNoDestino)
 				valNoDestino = vetNosAux[j].val;	// Obtém o 'val' do No de Destino da iteração atual
 			if((valNoOrigem != 0) && (valNoDestino != 0))
@@ -804,7 +816,7 @@ void Grafo::mostrarArvoreGeradoraMinima()
 			maior = valNoOrigem > valNoDestino ? valNoOrigem : valNoDestino;
 
 			for(j = 0; j < ordemGrafo; j++)		//
-				if(vetNosAux[j].val == maior)		// Normaliza os 'val' dos dois Nos para ser igual ao menor 'val'
+				if(vetNosAux[j].val == maior)	// Normaliza os 'val' dos dois Nos para ser igual ao menor 'val'
 					vetNosAux[j].val = menor;		//
 		}
 
@@ -833,12 +845,7 @@ int Grafo::componentesConexas()
 		}
 		no = no->getProx();
 	}
-	no = primeiroNo;
-	while(no != nullptr)
-	{
-		no->setVisitado(false);
-		no = no->getProx();
-	}
+	definirTodosNosDoGrafoComoNaoVisitados();
 	return componenteConexa;
 }
 
@@ -895,6 +902,7 @@ void Grafo::mostrarArvoreDeBuscaEmProfundidade(int idNo)
 	if((n != nullptr) && (!n->isVisitado()))
 		auxMostrarArvoreDeBuscaEmProfundidade(n);
 	cout << "Fim." << endl;
+	definirTodosNosDoGrafoComoNaoVisitados();
 }
 
 void Grafo::auxMostrarArvoreDeBuscaEmProfundidade(No* no)
@@ -937,15 +945,15 @@ Grafo* Grafo::retornarGrafoComplementar()
 			if(grauSaidaNo == 0)
 			{
 				if((novoNoOrigem != novoNoDestino)
-				   && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				      && !(novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 			else
 			{
 				bool noDestinoEstaNoArray = novoNoDestino->existeDentroDoVetor(
-						idsDestinoOriginal, grauSaidaNo);
+				      idsDestinoOriginal, grauSaidaNo);
 				if(!(noDestinoEstaNoArray) && (novoNoOrigem != novoNoDestino)
-				   && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
+				      && (!novoNoOrigem->existeAresta(novoNoDestino->getId())))
 					g->inserirArestaGrafo(novoNoOrigem, novoNoDestino, 1);
 			}
 
@@ -960,49 +968,57 @@ Grafo* Grafo::retornarGrafoComplementar()
 }
 // FECHO TRANSITIVO
 
-  	Grafo* Grafo::fechoTransitivoIndireto(int idNo){
-    Grafo* fechoIndireto = new Grafo(true);
-    fechoTransitivoIndiretoAux(idNo,fechoIndireto,retornarGrafoComplementar());
-    return fechoIndireto;
+Grafo* Grafo::fechoTransitivoIndireto(int idNo)
+{
+	Grafo* fechoIndireto = new Grafo(true);
+	fechoTransitivoIndiretoAux(idNo, fechoIndireto, retornarGrafoComplementar());
+	return fechoIndireto;
 }
 
-Grafo* Grafo::fechoTransitivoDireto(int idNo){
-    Grafo* fechoDireto = new Grafo(true);
-    fechoTransitivoDiretoAux(idNo,fechoDireto);
-    return fechoDireto;
+Grafo* Grafo::fechoTransitivoDireto(int idNo)
+{
+	Grafo* fechoDireto = new Grafo(true);
+	fechoTransitivoDiretoAux(idNo, fechoDireto);
+	return fechoDireto;
 }
 
-
-
- void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoComplementar){
-    No* n = grafoComplementar->procurarNo(idNo);
-    if(n != nullptr){
-        if(fechoIndireto->procurarNo(idNo) == nullptr){
-            Aresta *a = n->getPrimAresta();
-            fechoIndireto->inserirNo(n->getId());
-            while(a != nullptr){
-                fechoTransitivoIndiretoAux(a->getIdNoDestino(),fechoIndireto,grafoComplementar);
-                a = a->getProx();
-            }
-        n = n->getProx();
-        }
-    }
+void Grafo::fechoTransitivoIndiretoAux(int idNo, Grafo* fechoIndireto, Grafo* grafoComplementar)
+{
+	No* n = grafoComplementar->procurarNo(idNo);
+	if(n != nullptr)
+	{
+		if(fechoIndireto->procurarNo(idNo) == nullptr)
+		{
+			Aresta *a = n->getPrimAresta();
+			fechoIndireto->inserirNo(n->getId());
+			while(a != nullptr)
+			{
+				fechoTransitivoIndiretoAux(a->getIdNoDestino(), fechoIndireto,
+				      grafoComplementar);
+				a = a->getProx();
+			}
+			n = n->getProx();
+		}
+	}
 }
 
 void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto)
 {
-    No* n = fechoDireto->procurarNo(idNo);
-    if(n != nullptr){
-        if(fechoDireto->procurarNo(idNo) == nullptr) {
-            Aresta *a = n->getPrimAresta();
-            fechoDireto->inserirNo(n->getId());
-            while (a != nullptr) {
-                fechoTransitivoDiretoAux(a->getIdNoDestino(), fechoDireto);
-                a = a->getProx();
-            }
-            n = n->getProx();
-        }
-    }
+	No* n = fechoDireto->procurarNo(idNo);
+	if(n != nullptr)
+	{
+		if(fechoDireto->procurarNo(idNo) == nullptr)
+		{
+			Aresta *a = n->getPrimAresta();
+			fechoDireto->inserirNo(n->getId());
+			while(a != nullptr)
+			{
+				fechoTransitivoDiretoAux(a->getIdNoDestino(), fechoDireto);
+				a = a->getProx();
+			}
+			n = n->getProx();
+		}
+	}
 }
 /*********************************************
  * Informa ao usuario os ids dos nos de articulacao
@@ -1010,20 +1026,20 @@ void Grafo::fechoTransitivoDiretoAux(int idNo, Grafo* fechoDireto)
  *********************************************/
 void Grafo::nosDeArticulacao()
 {
-    int i;
-    int componentesInicias = componentesConexas();
-    No* no = primeiroNo;
-    i = 0;
-    cout << "Os nos de articulacao do grafo sao: ";
-    while ( no != nullptr)
-    {
-        if (componentesInicias < componentesConexas(no))
-            cout << no->getId() << " ";
-            //nosDeArticualacao[i] = true;
-        no = no->getProx();
-        i++;
-    }
-    cout << endl;
+	int i;
+	int componentesInicias = componentesConexas();
+	No* no = primeiroNo;
+	i = 0;
+	cout << "Os nos de articulacao do grafo sao: ";
+	while(no != nullptr)
+	{
+		if(componentesInicias < componentesConexas(no))
+			cout << no->getId() << " ";
+		//nosDeArticualacao[i] = true;
+		no = no->getProx();
+		i++;
+	}
+	cout << endl;
 }
 
 /*********************************************
@@ -1035,24 +1051,19 @@ void Grafo::nosDeArticulacao()
  *********************************************/
 int Grafo::componentesConexas(No* noIgnorado)
 {
-    int componenteConexa = 0;
-    No *no = primeiroNo;
-    while(no != nullptr)
-    {
-        if(!no->isVisitado() && no!= noIgnorado)
-        {
-            componenteConexa++;
-            auxComponentesConexas(no, noIgnorado);
-        }
-        no = no->getProx();
-    }
-    no = primeiroNo;
-    while(no != nullptr)
-    {
-        no->setVisitado(false);
-        no = no->getProx();
-    }
-    return componenteConexa;
+	int componenteConexa = 0;
+	No *no = primeiroNo;
+	while(no != nullptr)
+	{
+		if(!no->isVisitado() && no != noIgnorado)
+		{
+			componenteConexa++;
+			auxComponentesConexas(no, noIgnorado);
+		}
+		no = no->getProx();
+	}
+	definirTodosNosDoGrafoComoNaoVisitados();
+	return componenteConexa;
 }
 
 /***********************************************
@@ -1065,17 +1076,17 @@ int Grafo::componentesConexas(No* noIgnorado)
  ***********************************************/
 void Grafo::auxComponentesConexas(No *no, No* noIgnorado)
 {
-    if(!no->isVisitado())
-    {
-        no->setVisitado(true);
-        Aresta *aresta = no->getPrimAresta();
-        while(aresta != nullptr)
-        {
-            if (aresta->getNoDestino() != noIgnorado)
-            auxComponentesConexas(aresta->getNoDestino(), noIgnorado);
-            aresta = aresta->getProx();
-        }
-    }
+	if(!no->isVisitado())
+	{
+		no->setVisitado(true);
+		Aresta *aresta = no->getPrimAresta();
+		while(aresta != nullptr)
+		{
+			if(aresta->getNoDestino() != noIgnorado)
+				auxComponentesConexas(aresta->getNoDestino(), noIgnorado);
+			aresta = aresta->getProx();
+		}
+	}
 }
 /***********************************************
  * anda na lista do grafo um numero de posicoes
@@ -1084,10 +1095,10 @@ void Grafo::auxComponentesConexas(No *no, No* noIgnorado)
  ***********************************************/
 No *Grafo::noNaPosicao(int posicao)
 {
-    No *no = primeiroNo;
-    for (int i = 0; i < posicao; i++)
-        no = no->getProx();
-    return no;
+	No *no = primeiroNo;
+	for(int i = 0; i < posicao; i++)
+		no = no->getProx();
+	return no;
 }
 
 /***********************************************
@@ -1098,30 +1109,32 @@ No *Grafo::noNaPosicao(int posicao)
  ***********************************************/
 void Grafo::arestasPonte()
 {
-    No* no = primeiroNo;
-    No* noAux;
-    Aresta* aresta;
-    cout << "Arestas ponte do grafo:"<< endl;
-    while (no != nullptr)
-    {
-        aresta = no->getPrimAresta();
-        while (aresta != nullptr)
-        {
-            auxArestasPonte(no, aresta);
-            //print so funciona para grafos nao direcionados
-            if (!aresta->getNoDestino()->isVisitado() && no->getId() < aresta->getNoDestino()->getId())
-                cout << "("<< no->getId() << "," << aresta->getNoDestino()->getId() << ")" << " ";
-            noAux = primeiroNo;
-            while(noAux != nullptr)
-            {
-                noAux->setVisitado(false);
-                noAux = noAux->getProx();
-            }
-            aresta = aresta->getProx();
-        }
-        no = no->getProx();
-    }
-    cout << endl;
+	No* no = primeiroNo;
+	No* noAux;
+	Aresta* aresta;
+	cout << "Arestas ponte do grafo:" << endl;
+	while(no != nullptr)
+	{
+		aresta = no->getPrimAresta();
+		while(aresta != nullptr)
+		{
+			auxArestasPonte(no, aresta);
+			//print so funciona para grafos nao direcionados
+			if(!aresta->getNoDestino()->isVisitado()
+			      && no->getId() < aresta->getNoDestino()->getId())
+				cout << "(" << no->getId() << "," << aresta->getNoDestino()->getId()
+				      << ")" << " ";
+			noAux = primeiroNo;
+			while(noAux != nullptr)
+			{
+				noAux->setVisitado(false);
+				noAux = noAux->getProx();
+			}
+			aresta = aresta->getProx();
+		}
+		no = no->getProx();
+	}
+	cout << endl;
 }
 
 /***********************************************
@@ -1136,147 +1149,212 @@ void Grafo::arestasPonte()
  ***********************************************/
 void Grafo::auxArestasPonte(No *no, Aresta *aIngorada)
 {
-    if(!no->isVisitado())
-    {
-        no->setVisitado(true);
-        Aresta *aresta = no->getPrimAresta();
-        while(aresta != nullptr)
-        {
-            if (aresta != aIngorada)
-                auxArestasPonte(aresta->getNoDestino(), aIngorada);
-            aresta = aresta->getProx();
-        }
-    }
+	if(!no->isVisitado())
+	{
+		no->setVisitado(true);
+		Aresta *aresta = no->getPrimAresta();
+		while(aresta != nullptr)
+		{
+			if(aresta != aIngorada)
+				auxArestasPonte(aresta->getNoDestino(), aIngorada);
+			aresta = aresta->getProx();
+		}
+	}
 }
 
-float ** Grafo::matrizFloyd(){
-    int *vetorDeIndices = new int(ordem);
-    float **matriz = new float * [ordem];
-    for(int c = 0; c < ordem; c++){
-        matriz[c] = new float[ordem];
-        for(int d = 0; d < ordem; d++){
-            if(c==d)
-                matriz[c][d] = 0;
-            else
-                matriz[c][d] = INFINITO;
-        }
-    }
-    No * auxNo = primeiroNo;
-    int i = 0;
-    while (auxNo != nullptr)
-    {
-        vetorDeIndices[i] = auxNo->getId();
-        auxNo = auxNo->getProx();
-        i++;
-    }
-    auxNo = primeiroNo;
-    Aresta * auxAresta = nullptr;
-    while(auxNo!=nullptr){
-        auxAresta = auxNo->getPrimAresta();
-        while(auxAresta!= nullptr){
-            No* auxDestino = auxAresta->getNoDestino();
-            matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
-            auxAresta = auxAresta->getProx();
-        }
-        auxNo = auxNo->getProx();
-    }
-    for(int k = 0; k < ordem; k++){
-        for(int a = 0; a < ordem; a++){
-            for(int b = 0; b < ordem; b++){
-                if (matriz[a][b] > matriz[a][k] + matriz[k][b])
-                    matriz[a][b] = matriz[a][k] + matriz[k][b];
-            }
-        }
-    }
-    return matriz;
+float ** Grafo::matrizFloyd()
+{
+	int *vetorDeIndices = new int(ordem);
+	float **matriz = new float *[ordem];
+	for(int c = 0; c < ordem; c++)
+	{
+		matriz[c] = new float[ordem];
+		for(int d = 0; d < ordem; d++)
+		{
+			if(c == d)
+				matriz[c][d] = 0;
+			else
+				matriz[c][d] = INFINITO;
+		}
+	}
+	No * auxNo = primeiroNo;
+	int i = 0;
+	while(auxNo != nullptr)
+	{
+		vetorDeIndices[i] = auxNo->getId();
+		auxNo = auxNo->getProx();
+		i++;
+	}
+	auxNo = primeiroNo;
+	Aresta * auxAresta = nullptr;
+	while(auxNo != nullptr)
+	{
+		auxAresta = auxNo->getPrimAresta();
+		while(auxAresta != nullptr)
+		{
+			No* auxDestino = auxAresta->getNoDestino();
+			matriz[encontraIndice(vetorDeIndices, auxNo->getId())][encontraIndice(vetorDeIndices, auxDestino->getId())] = auxAresta->getPeso();
+			auxAresta = auxAresta->getProx();
+		}
+		auxNo = auxNo->getProx();
+	}
+	for(int k = 0; k < ordem; k++)
+	{
+		for(int a = 0; a < ordem; a++)
+		{
+			for(int b = 0; b < ordem; b++)
+			{
+				if(matriz[a][b] > matriz[a][k] + matriz[k][b])
+					matriz[a][b] = matriz[a][k] + matriz[k][b];
+			}
+		}
+	}
+	return matriz;
 }
 
 int Grafo::encontraIndice(int *vetor, int id)
 {
-    int i;
-    for (i = 0; i < ordem; i++)
-    {
-        if (id == vetor[i])
-            return i;
-    }
-    cout << "indice incorreto em encontraIndice " << id;
-    return -1;
+	int i;
+	for(i = 0; i < ordem; i++)
+	{
+		if(id == vetor[i])
+			return i;
+	}
+	cout << "indice incorreto em encontraIndice " << id;
+	return -1;
 }
 
-void Grafo::caminhoMinimo (int idNo1, int idNo2, bool algoritmo)
-{//bool true pra floyd e false pra dijkstra
-    if (algoritmo)
-    {
-        float **matriz = matrizFloyd();
-        int * vetor = new int(ordem);
-        No *no = primeiroNo;
-        for (int i = 0; i < ordem; i++)
-        {
-            vetor[i] = no->getId();
-            no= no->getProx();
-        }
-        idNo1 = encontraIndice(vetor, idNo1);
-        idNo2 = encontraIndice(vetor, idNo2);
-        if (idNo1 != -1 && idNo2 != -1)
-        {
-            cout << "Caminho minimo entre " << vetor[idNo1] << " e " << vetor[idNo2] <<" : " << matriz[idNo1][idNo2] << endl;
-        }
-        else
-        {
-            cout << "indices inseridos incorretamente." << endl;
-        }
-        delete []matriz;
-    } else
-    {
-        cout << "Dijkstra ainda nao implementado!" << endl;
-    }
+void Grafo::caminhoMinimo(int idNo1, int idNo2, bool algoritmo)
+{
+	//bool true pra floyd e false pra dijkstra
+	if(algoritmo)
+	{
+		float **matriz = matrizFloyd();
+		int * vetor = new int(ordem);
+		No *no = primeiroNo;
+		for(int i = 0; i < ordem; i++)
+		{
+			vetor[i] = no->getId();
+			no = no->getProx();
+		}
+		idNo1 = encontraIndice(vetor, idNo1);
+		idNo2 = encontraIndice(vetor, idNo2);
+		if(idNo1 != -1 && idNo2 != -1)
+		{
+			cout << "Caminho minimo entre " << vetor[idNo1] << " e "
+			      << vetor[idNo2] << " : " << matriz[idNo1][idNo2] << endl;
+		}
+		else
+		{
+			cout << "indices inseridos incorretamente." << endl;
+		}
+		delete[] matriz;
+	}
+	else
+	{
+		cout << "Dijkstra ainda nao implementado!" << endl;
+	}
 }
 
 void Grafo::dadosDeExcentricidade()
 {
-    if (componentesConexas() == 1)
-    {
-        float **matriz = this->matrizFloyd();
-        int vetor[ordem];
-        float vetorExcentricidade[ordem];
-        No *no = primeiroNo;
-        for (int i = 0; i < ordem; i++)
-        {
-            vetor[i] = no->getId();
-            no= no->getProx();
-        }
-        for (int i = 0; i < ordem; i++)
-        {
-            vetorExcentricidade[i] = 0;
-            for (int j = 0; j < ordem; j++)
-            {
-                if (matriz[i][j] > vetorExcentricidade[i])
-                    vetorExcentricidade[i] = matriz[i][j];
-            }
-        }
-        float raio = vetorExcentricidade[0];
-        float diametro = vetorExcentricidade[0];
-        for (int i = 0; i < ordem; i++)
-        {
-            if (vetorExcentricidade[i] > diametro)
-                diametro = vetorExcentricidade[i];
-            if (vetorExcentricidade[i] < raio)
-                raio = vetorExcentricidade[i];
-        }
-        cout << "Raio do grafo: " << raio << endl;
-        cout << "Diametro do grafo: " << diametro << endl;
-        cout << "Centro do grafo: ";
-        for (int i = 0; i < ordem; i++)
-        {
-            if (raio == vetorExcentricidade[i])
-                cout << noNaPosicao(i)->getId() << " ";
-        }
-        cout << endl << "Periferia do grafo: ";
-        for (int i = 0; i < ordem; i++)
-        {
-            if (diametro == vetorExcentricidade[i])
-                cout << noNaPosicao(i)->getId() << " ";
-        }
-        delete []matriz;
-    }
+	if(componentesConexas() == 1)
+	{
+		float **matriz = this->matrizFloyd();
+		int vetor[ordem];
+		float vetorExcentricidade[ordem];
+		No *no = primeiroNo;
+		for(int i = 0; i < ordem; i++)
+		{
+			vetor[i] = no->getId();
+			no = no->getProx();
+		}
+		for(int i = 0; i < ordem; i++)
+		{
+			vetorExcentricidade[i] = 0;
+			for(int j = 0; j < ordem; j++)
+			{
+				if(matriz[i][j] > vetorExcentricidade[i])
+					vetorExcentricidade[i] = matriz[i][j];
+			}
+		}
+		float raio = vetorExcentricidade[0];
+		float diametro = vetorExcentricidade[0];
+		for(int i = 0; i < ordem; i++)
+		{
+			if(vetorExcentricidade[i] > diametro)
+				diametro = vetorExcentricidade[i];
+			if(vetorExcentricidade[i] < raio)
+				raio = vetorExcentricidade[i];
+		}
+		cout << "Raio do grafo: " << raio << endl;
+		cout << "Diametro do grafo: " << diametro << endl;
+		cout << "Centro do grafo: ";
+		for(int i = 0; i < ordem; i++)
+		{
+			if(raio == vetorExcentricidade[i])
+				cout << noNaPosicao(i)->getId() << " ";
+		}
+		cout << endl << "Periferia do grafo: ";
+		for(int i = 0; i < ordem; i++)
+		{
+			if(diametro == vetorExcentricidade[i])
+				cout << noNaPosicao(i)->getId() << " ";
+		}
+		delete[] matriz;
+	}
+}
+
+/******************************************
+ * Mostra as componentes conexas do Grafo
+ ******************************************/
+void Grafo::mostrarComponentesConexas()
+{
+	bool noJaVisitado;
+	cout << "Componentes conexas do Grafo:" << endl;
+	No* n = primeiroNo;
+	while(n != nullptr)
+	{
+		if(!n->isVisitado())
+			cout << "[ ";
+
+		noJaVisitado = auxMostrarComponentesConexas(n);
+
+		if(!noJaVisitado)
+			cout << "]" << endl;
+
+		n = n->getProx();
+	}
+	definirTodosNosDoGrafoComoNaoVisitados();
+}
+
+bool Grafo::auxMostrarComponentesConexas(No* no)
+{
+	bool noJaVisitado = true;		// Retorna para a função principal se o No informado já havia sido visitado
+	if(!no->isVisitado())
+	{
+		noJaVisitado = false;
+		no->setVisitado(true);
+		cout << no->getId() << " ";
+		Aresta* a = no->getPrimAresta();
+		while(a != nullptr)
+		{
+			auxMostrarComponentesConexas(a->getNoDestino());
+			a = a->getProx();
+		}
+	}
+	return noJaVisitado;
+}
+
+/**************************************************************
+ * Define a propriedade 'visitado' de todos os Nos para falso
+ **************************************************************/
+void Grafo::definirTodosNosDoGrafoComoNaoVisitados()
+{
+	No* no = primeiroNo;
+	while(no != nullptr)
+	{
+		no->setVisitado(false);
+		no = no->getProx();
+	}
 }

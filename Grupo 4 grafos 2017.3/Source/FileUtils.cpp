@@ -36,7 +36,11 @@ Grafo* FileUtils::retornarGrafo()
 	return g;
 }
 
-void FileUtils::salvarGrafo(Grafo *g) //incompleto porque ainda nao ha forma de pegar as informacoes do grafo
+/*********************************************
+ * Salva o Grafo num arquivo .txt passado
+ * como parâmetro para a aplicação
+ *********************************************/
+void FileUtils::salvarGrafo(Grafo *g)
 {
 	ofstream leitor;
 	leitor.open(argv[2]);
