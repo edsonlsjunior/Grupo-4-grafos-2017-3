@@ -62,6 +62,7 @@ public:
     void dadosDeExcentricidade();
     float* dijsktra(int idOrigem);
 
+
 	// Funcoes relacionadas a Nos
 	void inserirNo();
 	void inserirNo(int id);
